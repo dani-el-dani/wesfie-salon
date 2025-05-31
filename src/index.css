@@ -2,7 +2,7 @@
   /* === Primary Color (60%) — Warm Ivory and Variants === */
   --color-primary-lightest: #FFFDF9;
   --color-primary: #FAF3E0;
-  --color-primary-darker: #E5DAC5;
+  --color-primary-darker: #e5dac5;
   --color-primary-contrast: #D9C7A6;
 
   /* === Secondary Color (30%) — Deep Plum and Variants === */
@@ -274,7 +274,7 @@ a.learn-more-btn:hover span{
   transform: translateX(0.5rem);
 }
 
-section.about-us-section{
+section.about-us-section, section.mission-section{
   background-color: var(--color-primary-darker);
   padding-block: 4rem;
 }
@@ -529,9 +529,9 @@ div.services-card-container{
 }
 
 div.service-card{
-  padding: 2rem;
   border: 1px solid var(--color-primary-contrast);
   border-radius: 10px;
+  overflow: hidden;
 }
 
 div.service-card > img{
@@ -541,6 +541,7 @@ div.service-card > img{
 }
 
 div.service-detail-container{
+  padding: 2rem;
   display: flex;
   flex-direction: column;
   gap: 0.8rem;
@@ -575,4 +576,177 @@ div.service-detail-container > a{
 
 div.service-detail-container > a:hover{
   transform: translateX(1rem);
+}
+
+/* --------------------------- About Us Page -------------------------------*/
+
+p.our-story-text{
+  font-size: var(--text-16);
+  color: var(--color-secondary-darker);
+  font-weight: var(--weight-medium);
+  line-height: var(--line-normal);
+  text-align: center; 
+  margin-bottom: 2rem;
+}
+
+div.our-staff-container{
+  display: flex;
+  flex-wrap: wrap;
+  gap: 3rem;
+  justify-content: center;
+}
+
+div.staff-container{
+  width: 30%;
+  position: relative;
+  overflow: hidden;
+}
+
+div.staff-container > img{
+  width: 100%;
+  transform: scale(1.25);
+  transition: 0.2s ease-in transform;
+}
+
+div.staff-detail-container{
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  gap: 2rem;
+  padding: 3rem;
+  inset: 0;
+  z-index: 1;
+
+}
+
+div.staff-detail-container::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(229,218,197,0.24) 0%, var(--color-primary-lightest) 100%);
+  z-index: -1;
+  opacity: 0;
+  transition-property: opacity;
+}
+
+div.staff-container:hover div.staff-detail-container::before{
+  opacity: 1;
+}
+
+div.staff-detail-container > h3{
+  font-size: var(--text-18);
+  font-weight: var(--weight-semibold);
+  opacity: 0;
+  transform: translate3d(0, -6rem, 0);
+  transition: 0.2s ease-in transform;
+}
+
+div.staff-detail-container > p{
+  font-size: var(--text-16);
+  opacity: 0;
+  transform: translate3d(0, 6rem, 0);
+  transition: 0.2s ease-in transform;
+}
+
+div.staff-container:hover > img{
+  transform: scale(1);
+}
+
+div.staff-container:hover div.staff-detail-container > h3{
+  opacity: 1;
+  transform: translate3d(0, 0, 0);
+}
+
+div.staff-container:hover div.staff-detail-container > p{
+  opacity: 1;
+  transform: translate3d(0, 0, 0);
+}
+
+div.reaseons-container{
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 3rem;
+  align-items: center;
+}
+
+div.reason{
+  padding: 3rem;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.15);
+}
+
+div.reason > p{
+  font-size: var(--text-18);
+  font-weight: var(--weight-medium);
+}
+
+/* --------------------Bobking Page---------------------------- */
+
+div.steps-container{
+  display: flex;
+  justify-content: space-evenly;
+  gap: 1rem;
+}
+
+div.step > span{
+  width: 36px;
+  height: 36px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: var(--text-24);
+  font-weight: var(--weight-semibold);
+  background-color: var(--color-secondary-light);
+  color: var(--color-primary-contrast);
+  border-radius: 50%;
+  margin-bottom: 1rem;
+}
+
+div.step > p{
+  font-size: var(--text-18);
+  font-weight: var(--weight-semibold);
+  color: var(--color-secondary-light);
+}
+
+div.current-step{
+  border-bottom: solid 4px var(--color-secondary-darker);
+}
+
+div.finished-step > span{
+  background-color: var(--color-secondary-darker);
+}
+
+div.finished-step > p{
+  color: var(--color-secondary-darker);
+}
+
+form{
+  width: 100%;
+}
+
+div.form-nav-btns{
+  display: flex;
+  position: relative;
+  width: 100%;
+}
+
+button.next-btn{
+ position: absolute;
+ right: 0;
+}
+/* --------------------Media queries--------------------------- */
+
+@media(hover:none){
+  div.staff-detail-container::before{
+    opacity: 1;
+  }
+  div.staff-detail-container > h3,
+  div.staff-detail-container > p{
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+  div.staff-container > img{
+    transform: scale(1);
+  }
 }

@@ -1,9 +1,9 @@
 
 
-function PageHeader(){
+function PageHeader({title}){
     return(
         <section className='services-page-header'>
-            <h1>Our Services</h1>
+            <h1>{title}</h1>
         </section>
     )
 }

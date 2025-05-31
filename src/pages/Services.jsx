@@ -25,7 +25,7 @@ function Services(){
     return(
         <>
             <header>
-                <PageHeader />
+                <PageHeader title="Our Services"/>
             </header>
             <main>
                 <section>

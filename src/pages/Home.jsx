@@ -66,7 +66,7 @@ function Home(){
                                     <p>Welcome to Wesfie Salon, your destination for premium women’s beauty care in Ethiopia. Rooted in tradition and elevated by modern style, Wesfie is named after the traditional hair stick pin—a symbol of grace, pride, and beauty. Our goal is to honor that spirit in every service we provide.</p>
                                     <p>At Wesfie, we believe beauty is more than skin deep—it’s a celebration of culture, confidence, and care. Whether you're preparing for a special event or simply treating yourself, our team is here to help you feel your most radiant.</p>
                                     <p><em>“Every woman deserves to feel seen and celebrated.”</em> Selam Ayalew, Founder</p>
-                                    <a className='learn-more-btn' href="">More About us <span>&rarr;</span></a>
+                                    <Link to='aboutus' className='learn-more-btn'>More About us <span>&rarr;</span></Link>
                                 </div>
                                 
                             </div>

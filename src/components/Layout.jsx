@@ -1,5 +1,5 @@
 import logo from '../assets/images/logo.png'
-import { NavLink, Outlet } from 'react-router'
+import { Link, NavLink, Outlet } from 'react-router'
 
 function Layout(){
     return(
@@ -30,7 +30,7 @@ function Layout(){
                         </NavLink>
                     </li>
                 </ul>
-                <a className='nav-links CTA-btn' href="">Book Now</a>
+                <Link to="booking" className='nav-links CTA-btn'>Book Now</Link>
             </nav>
         
             <Outlet/>
