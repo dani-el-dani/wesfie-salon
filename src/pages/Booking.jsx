@@ -1,61 +1,235 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
+import ServiceSelection from "../components/FormComponents/ServiceSelection";
+import { mainServices, addOns } from "../services";
+import AddOnsSelection from "../components/FormComponents/AddOnsSelection";
+import StylistSelection from "../components/FormComponents/StylistSelection";
+import ConfirmBooking from "../components/FormComponents/ConfirmBooking";
+import { ethiopianDateNow, getNextDay, toDateString, parseDate } from "../utils/dateUtils";
+import DateSelection from "../components/FormComponents/DateSelaction";
+import { useOutletContext } from "react-router";
+import PersonalInfo from "../components/FormComponents/PersonalInfo";
+import BookingStatus from "../components/FormComponents/BookingStatus";
+
+
+const simulateServerRequest = (delay, data, shouldSucceed = true) => {
+  return new Promise((resolve, reject) => {
+    setTimeout(() => {
+      if (shouldSucceed) {
+        resolve({ data: data, status: 200 });
+      } else {
+        reject({ message: 'Request timed out', status: 408 });
+      }
+    }, delay);
+  });
+};
 
 function Booking(){
 
-    const steps = ["Select service", "Select stylist", "Book date and time", "Fill you information", "Confirm"]
-    const [currentStep, setCurrentStep] = useState(0);
+    const {setIsCTAVisible,isMenuOpened} = useOutletContext()
+    console.log(isMenuOpened)
+    const steps = ["Select service", "Select AddOns","Select stylist", "Book date and time", "Fill you information", "Confirm"]
+    const [currentStep, setCurrentStep] = useState(0)
+    const [loading, setLoading] = useState(false)
+    const [bookingDetail, setBookingDetail] = useState({
+        selectedService:null,
+        addOns:[],
+        selectedStylist:null,
+        selectedDate:getNextDay(ethiopianDateNow()),
+        selectedTime:null,
+        fullName:'fake name',
+        phoneNumber:'1234567890'
 
-    function handleFormSubmition(){
-        if(currentStep < 4){
-            setCurrentStep(prevCurrentStep => prevCurrentStep + 1)
+    })
+
+
+    useEffect(() =>{
+        setIsCTAVisible(false)
+        return () => setIsCTAVisible(true)
+    },[])
+
+    const [error,setError] = useState(null)
+
+    function validateForm(){
+        setError(null)
+        let isValid = true
+        if(currentStep === 0 && !bookingDetail.selectedService){
+            setError(prevError => ({...prevError, selectedServiceError:'You must choose a service!!'}))
+            isValid = false
         }
+        if(currentStep === 2 && !bookingDetail.selectedStylist){
+            setError(prevError => ({...prevError, selectedStylistError:'You must choose a stylist!!'}))
+            isValid = false
+        }
+        if(currentStep === 3 && !bookingDetail.selectedTime){
+            setError(prevError => ({...prevError, selectedTimeError:'You must choose a time!!'}))
+            isValid = false
+        }
+
+        if(currentStep === 4){
+            if(bookingDetail.fullName.length === 0){
+                setError(prevError => ({...prevError, fullNameError:'Please fill this field name is required'}))
+                isValid = false
+            }
+            if(bookingDetail.phoneNumber.length === 0){
+                setError(prevError => ({...prevError, phoneNumberError:'Please fill this field phone number is required'}))
+                isValid = false
+            }
+        }
+        
+        return isValid
+    }
+
+    function handleAddOnsSelection(e){
+        const{name,checked} = e.target
+
+        if(checked){
+            setBookingDetail(prevBookingDetail => (
+                {
+                    ...prevBookingDetail,
+                    addOns: [...prevBookingDetail.addOns, name]
+                }
+            ))
+        }
+
+        else{
+            setBookingDetail(prevBookingDetail => (
+                {
+                    ...prevBookingDetail,
+                    addOns: prevBookingDetail.addOns.filter(addon => addon !== name)
+                }
+            ))
+
+        }
+    }
+
+    function handleChange(e){
+        const {name, value} = e.target
+
+        setBookingDetail(prevBookingDetail => ({
+            ...prevBookingDetail,
+            [name] : name === 'selectedDate'? parseDate(value) : value
+        }))
+
+        if(name === 'selectedDate'){
+            setBookingDetail(prevBookingDetail => ({
+                ...prevBookingDetail,
+                selectedTime : null
+            }))
+        }
+
+        if(name === 'selectedService'){
+            setBookingDetail(prevBookingDetail => ({
+                ...prevBookingDetail,
+                addOns : []
+            }))
+        }
+
+    }
+
+    async function handleFormSubmition(e){
+        e.preventDefault()
+        if(validateForm()){
+            if(currentStep < steps.length-1){
+                setCurrentStep(prevCurrentStep => prevCurrentStep + 1)
+            }
+
+            else{
+                setLoading(true)
+                try{
+                    const response = await simulateServerRequest(3000, { message: 'Data from server' }, true);
+                }catch(err){
+
+                }finally{
+                    setLoading(false)
+                }
+                setCurrentStep(prev => prev + 1)
+                
+            }
+
+            window.scrollTo(0, 0);
+        }
+        
     }
 
     function handleBackButton(){
         setCurrentStep(prevCurrentStep => prevCurrentStep - 1)
+        window.scrollTo(0, 0);
     }
 
     
     return(
         <>
-            <header>
-                <section className='booking-header-section'>
-                    <div className='section-container'>
-                        <h2 className='section-title'>Book Your Apointment</h2>
-                        <div className='steps-container'>
+            <section className='booking-form-secton'>
+                <div className='section-container'>
+                    <h2 className='section-title'>Book Your Apointment</h2>
+                    <div className='steps-container'>
+                        {steps.map((step, index) => (
+                            <div 
+                                key={index} 
+                                className={`step + ${index <= currentStep
+                                    ?'finished-step'
+                                    :undefined} 
+                                    ${index === currentStep
+                                    ?'current-step'
+                                    :undefined
+                                }`}
+                            >
+                                <span className='step-number'>{index + 1}</span>
+                                <p className='step-description'>{step}</p>
+                            </div>  
+                        ))}
+                    </div>
+                    <div className='steps-container-sm'>
+                        <span className='step-number'>{currentStep + 1}</span>
+                        <p className='step-description'>{steps[currentStep]}</p>
+                        <div className='step-box-container'>
                             {steps.map((step, index) => (
-                                <div 
-                                    key={index} 
-                                    className={`step ' + ${index <= currentStep
-                                        ?'finished-step'
-                                        :undefined} 
-                                        ${index === currentStep
-                                        ?'current-step'
-                                        :undefined
-                                    }`}
-                                >
-                                    <span className='step-number'>{index + 1}</span>
-                                    <p className='step-description'>{step}</p>
-                                </div>  
+                                
+                                    <div 
+                                        key={index} 
+                                        className={`step-sm + ${index < currentStep
+                                            ?'finished-step-sm'
+                                            :undefined} 
+                                            ${index === currentStep
+                                            ?'current-step-sm'
+                                            :undefined
+                                        }`}
+                                    >
+                                    </div>  
+
+                                
                             ))}
                         </div>
                     </div>
-                </section>
-                <section className='booking-form-secton'>
-                    <div className='section-container'>
-                        <form action={handleFormSubmition}>
-                            <div className='form-nav-btns'>
-                                {currentStep > 0 && <button onClick={handleBackButton} type='button'>Back</button>}
-                                <button type='submit' className='next-btn'>Next</button>
-                            </div>
-                            
-                        </form>
 
+                    <div className='booking-steps-container'>
+                        {currentStep < 6 
+                            ? <form onSubmit={(e) => handleFormSubmition(e)}>
+                                {currentStep === 0 && <ServiceSelection bookingDetail={bookingDetail} handleChange={handleChange} error={error}/>}
+                                {currentStep === 1 && <AddOnsSelection bookingDetail={bookingDetail} handleChange={handleAddOnsSelection} error={error}/>}
+                                {currentStep === 2 && <StylistSelection bookingDetail={bookingDetail} handleChange={handleChange} error={error}/>}
+                                {currentStep === 3 && <DateSelection bookingDetail={bookingDetail} handleChange={handleChange} error={error}/>}
+                                {currentStep === 4 && <PersonalInfo bookingDetail={bookingDetail} handleChange={handleChange} error={error}/>}
+                                {currentStep === 5 && <ConfirmBooking bookingDetail={bookingDetail}/>}
+                                <div className={`form-nav-btns ${currentStep === 0 ? 'first-step' : undefined}`}>
+                                    {currentStep > 0 && <button className={`${!loading ? 'form-btn':undefined}`} disabled={loading} onClick={handleBackButton} type='button'>Back</button>}
+                                    <button className={`${!loading ? 'form-btn':undefined}`} disabled={loading} type='submit'>{currentStep === steps.length-1 ? 'Book' : 'Next'}</button>
+                                </div>
+                                
+                            </form>
+                            
+                            : <BookingStatus />
+                        
+                        }
+
+                            
                     </div>
                     
 
-                </section>
-            </header>
+                </div>
+                
+
+            </section>
         </>
     )
 }

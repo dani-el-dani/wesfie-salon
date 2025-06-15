@@ -1,6 +1,6 @@
 import PageHeader from "../components/PageHeader"
 import ServiceCard from "../components/ServiceCard"
-import { salonServices } from "../services"
+import { mainServices } from "../services"
 import { useSearchParams, Link } from "react-router"
 
 
@@ -8,8 +8,8 @@ function Services(){
     const [searchParams, setSearchParams] = useSearchParams()
     const filter = searchParams.get('category')
     const services = filter
-        ? salonServices[filter.toLowerCase()].mainServices 
-        : [...salonServices.hair.mainServices, ...salonServices.makeup.mainServices, ...salonServices.nails.mainServices] 
+        ? mainServices.filter(service => service.category.toLowerCase() === filter.toLowerCase())
+        : mainServices 
 
     function handelClick(key,value){
         setSearchParams(prevParams => {

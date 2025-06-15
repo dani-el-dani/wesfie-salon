@@ -50,7 +50,7 @@ function AboutUs(){
                         <div className='our-staff-container'>
 
                             {staffs.map(staff => (
-                                <div key={staff.Id} className='staff-container'>
+                                <div key={staff.id} className='staff-container'>
                                     <img src={staff.imageUrl} alt="" />
                                     <div className='staff-detail-container'>
                                         <h3>{staff.name}</h3>

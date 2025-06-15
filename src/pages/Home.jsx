@@ -6,7 +6,7 @@ import nail from '../assets/images/nail-polish.png'
 import salonImg from '../assets/images/salon-img.jpg'
 import Testimonials from "../components/Testimonials";
 import { galleryImages } from "../images";
-import { Link } from "react-router";
+import { Link } from 'react-router';
 
 function Home(){
     return(
@@ -18,7 +18,7 @@ function Home(){
                         <p className='hero-tagline'>Where Beauty Meets Tradition</p>
                         <p className='hero-text'>Discover expert care in Hair, Makeup, and Nail services, inspired by Ethiopian elegance and tailored to your unique beauty.</p>
                         <div>  
-                            <a className='CTA-btn' href="">Book Yor Appointment</a>
+                            <Link className='CTA-btn' to='booking'>Book Yor Appointment</Link>
                         </div>
                     </div>
                     <div className='hero-image-container'>
@@ -135,7 +135,7 @@ function Home(){
                         <div className='CTA-container'>
                             <h2>Ready for Your Next Glam Session?</h2>
                             <p>Whether it’s a fresh hairstyle, flawless makeup, or the perfect nail finish — Wesfie Salon is here to bring your beauty vision to life. Book your appointment today and let us pamper you with expert care and tradition-inspired style.</p>
-                            <a className='CTA-section-btn' href="">Book an Appointment</a>
+                            <Link className='CTA-section-btn' to="booking">Book an Appointment</Link>
                         </div>
                     </div>
                 </section>

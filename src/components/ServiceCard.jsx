@@ -1,6 +1,3 @@
-import { salonServices } from "../services"
-
-
 
 function ServiceCard({detail}){
     return(
@@ -9,7 +6,7 @@ function ServiceCard({detail}){
             <div className='service-detail-container'>
                 <h2>{detail.name}</h2>
                 <p>{detail.description}</p>
-                <h3>{detail.price} &#x25cf; {detail.duration}</h3>
+                <h3>{detail.price} ETB &#x25cf; {detail.duration} Min</h3>
                 <a href="">Book Now <span>&rarr;</span></a>
             </div>
         </div>
