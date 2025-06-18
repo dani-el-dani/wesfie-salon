@@ -22,7 +22,7 @@ function DateSelection({bookingDetail, handleChange, error}){
     const [currentMonth, setCurrentMonth] = useState(bookingDetail.selectedDate.month)
     const [currentYear, setCurrentYear] = useState(bookingDetail.selectedDate.year)
     const curentGCdate = ethiopianToGregorian({year:currentYear,month:currentMonth,day:1})
-    const timeSlots = getAvailableSlots(bookingDetail)
+    const timeSlots = async () => await getAvailableSlots(bookingDetail)
     
     function handlePrevMonth(){
     let prevCurrentMonth = currentMonth - 1
@@ -106,7 +106,7 @@ function DateSelection({bookingDetail, handleChange, error}){
             
             <StepHeading title='Select a Time' description='Choose an available time slot for your appointment'/>
 
-            <div className='date-picker-calendar'>
+            <div className='time-picker'>
 
                 {timeSlots.map( (slot) => {
                     return (

@@ -1,6 +1,8 @@
 import logo from '../assets/images/logo.png'
+import logoFooter from '../assets/images/logo_primary_color.png'
 import { useState } from 'react'
 import { Link, NavLink, Outlet } from 'react-router'
+import { FiPhone, FiMail } from 'react-icons/fi'
 
 function Layout(){
 
@@ -10,14 +12,14 @@ function Layout(){
 
     return(
         <div className='site-wrapper'>
-            <nav>
+            <nav className={`${isMenuOpened ? 'nav-menu-opened': undefined}`}>
                 <div className='nav-container'>
                     <div onClick={() => setIsMenuOpened(!isMenuOpened)} className={`menu ${!isMenuOpened?'burger-menu-icon':'close-menu-icon'}`}>
                         <span></span>
                         <span></span>
                         <span></span>
                     </div>
-                    <img id='logo' src={logo} alt="Logo of Wesfie Salon" />
+                    <Link to='/' onClick={() => setIsMenuOpened(false)}><img id='logo' src={logo} alt="Logo of Wesfie Salon" /></Link>
                     <ul className='nav-list'>
                         <li className='nav-list-item'>
                             <NavLink 
@@ -42,14 +44,15 @@ function Layout(){
                             </NavLink>
                         </li>
                     </ul>
-                    {isCTAVisible && <Link to="booking"  className='nav-links CTA-btn'>Book Now</Link>}
+                    {isCTAVisible && <Link to="booking" onClick={() => setIsMenuOpened(false)} className='nav-links CTA-btn'>Book Now</Link>}
                 </div>
 
                 <div className={`${isMenuOpened ? 'nav-container-sm-opened' : 'nav-container-sm'}`}>
                     <ul className='nav-list-sm'>
                         <li className='nav-list-item-sm'>
                             <NavLink 
-                                to="" 
+                                to=""
+                                onClick={() => setIsMenuOpened(false)} 
                                 className={({ isActive }) => (isActive ? 'active-nav-link-sm nav-link-sm' : 'nav-link-sm')}
                                 end>
                                     Home
@@ -57,27 +60,60 @@ function Layout(){
                         </li>
                         <li className='nav-list-item-sm'>
                             <NavLink 
-                                to="services" 
+                                to="services"
+                                onClick={() => setIsMenuOpened(false)} 
                                 className={({ isActive }) => (isActive ? 'active-nav-link-sm nav-link-sm' : 'nav-link-sm')}>
                                     Services
                             </NavLink>
                         </li>
                         <li className='nav-list-item-sm'>
                             <NavLink 
-                                to="aboutus" 
+                                to="aboutus"
+                                onClick={() => setIsMenuOpened(false)} 
                                 className={({ isActive }) => (isActive ? 'active-nav-link-sm nav-link-sm' : 'nav-link-sm')}>
                                     About us
                             </NavLink>
                         </li>
                     </ul>
-                </div>
-                
+                </div>                
             </nav>
         
-            <Outlet context={{setIsCTAVisible,isMenuOpened}}/>
+            <Outlet context={setIsCTAVisible}/>
 
-            <footer className='footer'>
+            <footer >
+                <div className='footer'>
+                    <div className='footer-container'>
+                        <Link to='/' onClick={() => setIsMenuOpened(false)}><img id='logo' src={logoFooter} alt="Logo of Wesfie Salon" /></Link>
+                        <div className='footer-nav-container'>
+                            <h3>Go to</h3>
+                            <ul>
+                                <li><Link to=''>Home</Link></li>
+                                <li><Link to='services'>Services</Link></li>
+                                <li><Link to='aboutus'>About us</Link></li>
+                            </ul>
+                        </div>
+                        <div className='contact'>
+                            <h3>Contact</h3>
+                            <div className='contact-container'>
+                                <FiMail className='contact-icon'/>
+                                <div className='contact-info'>
+                                    <h4>Email</h4>
+                                    <p>info@wesfiesalon.com</p>
+                                </div>
+                            </div>
 
+                            <div className='contact-container'>
+                                <FiPhone className='contact-icon' />
+                                <div className='contact-info'>
+                                    <h4>Phone</h4>
+                                    <p>+251912345678</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <p>Wesfie Salon &copy; All rigths reserved 2025</p>
+                </div>
+                
             </footer>
         </div>
         

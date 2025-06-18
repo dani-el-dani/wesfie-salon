@@ -6,7 +6,7 @@ import StylistSelection from "../components/FormComponents/StylistSelection";
 import ConfirmBooking from "../components/FormComponents/ConfirmBooking";
 import { ethiopianDateNow, getNextDay, toDateString, parseDate } from "../utils/dateUtils";
 import DateSelection from "../components/FormComponents/DateSelaction";
-import { useOutletContext } from "react-router";
+import { useOutletContext, useLocation } from "react-router";
 import PersonalInfo from "../components/FormComponents/PersonalInfo";
 import BookingStatus from "../components/FormComponents/BookingStatus";
 
@@ -25,13 +25,14 @@ const simulateServerRequest = (delay, data, shouldSucceed = true) => {
 
 function Booking(){
 
-    const {setIsCTAVisible,isMenuOpened} = useOutletContext()
-    console.log(isMenuOpened)
+    const location = useLocation()
+
+    const setIsCTAVisible = useOutletContext()
     const steps = ["Select service", "Select AddOns","Select stylist", "Book date and time", "Fill you information", "Confirm"]
-    const [currentStep, setCurrentStep] = useState(0)
+    const [currentStep, setCurrentStep] = useState(location.state?.service ? 1 : 0)
     const [loading, setLoading] = useState(false)
     const [bookingDetail, setBookingDetail] = useState({
-        selectedService:null,
+        selectedService : location.state?.service || null,
         addOns:[],
         selectedStylist:null,
         selectedDate:getNextDay(ethiopianDateNow()),
@@ -166,13 +167,7 @@ function Booking(){
                         {steps.map((step, index) => (
                             <div 
                                 key={index} 
-                                className={`step + ${index <= currentStep
-                                    ?'finished-step'
-                                    :undefined} 
-                                    ${index === currentStep
-                                    ?'current-step'
-                                    :undefined
-                                }`}
+                                className={`step ${index <= currentStep ?'finished-step' :''} ${index === currentStep ? 'current-step' : ''}`}
                             >
                                 <span className='step-number'>{index + 1}</span>
                                 <p className='step-description'>{step}</p>
@@ -180,24 +175,16 @@ function Booking(){
                         ))}
                     </div>
                     <div className='steps-container-sm'>
-                        <span className='step-number'>{currentStep + 1}</span>
-                        <p className='step-description'>{steps[currentStep]}</p>
+                        <span className='step-number'>{Math.min(currentStep + 1, steps.length)}</span>
+                        <p className='step-description'>{steps[Math.min(currentStep, steps.length - 1)]}</p>
                         <div className='step-box-container'>
                             {steps.map((step, index) => (
                                 
                                     <div 
                                         key={index} 
-                                        className={`step-sm + ${index < currentStep
-                                            ?'finished-step-sm'
-                                            :undefined} 
-                                            ${index === currentStep
-                                            ?'current-step-sm'
-                                            :undefined
-                                        }`}
+                                        className={`step-sm ${index < currentStep ? 'finished-step-sm' : ''} ${index === currentStep ? 'current-step-sm' : ''}`}
                                     >
-                                    </div>  
-
-                                
+                                    </div>    
                             ))}
                         </div>
                     </div>
@@ -211,9 +198,9 @@ function Booking(){
                                 {currentStep === 3 && <DateSelection bookingDetail={bookingDetail} handleChange={handleChange} error={error}/>}
                                 {currentStep === 4 && <PersonalInfo bookingDetail={bookingDetail} handleChange={handleChange} error={error}/>}
                                 {currentStep === 5 && <ConfirmBooking bookingDetail={bookingDetail}/>}
-                                <div className={`form-nav-btns ${currentStep === 0 ? 'first-step' : undefined}`}>
-                                    {currentStep > 0 && <button className={`${!loading ? 'form-btn':undefined}`} disabled={loading} onClick={handleBackButton} type='button'>Back</button>}
-                                    <button className={`${!loading ? 'form-btn':undefined}`} disabled={loading} type='submit'>{currentStep === steps.length-1 ? 'Book' : 'Next'}</button>
+                                <div className={`form-nav-btns ${currentStep === 0 ? 'first-step' : ''}`}>
+                                    {currentStep > 0 && <button className={`${!loading ? 'form-btn': ''}`} disabled={loading} onClick={handleBackButton} type='button'>Back</button>}
+                                    <button className={`${!loading ? 'form-btn': ''}`} disabled={loading} type='submit'>{currentStep === steps.length-1 ? 'Book' : 'Next'}</button>
                                 </div>
                                 
                             </form>

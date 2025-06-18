@@ -136,7 +136,6 @@ a.active-nav-link, a.nav-link:hover{
 ul.nav-list-sm{
   display: flex;
   flex-direction: column;
-  background-color: var(--color-primary);
   padding: 1rem 2rem;
 }
 
@@ -188,11 +187,68 @@ div.close-menu-icon span:nth-child(3){
   transform: translate3d(0, -10px, 0) rotate(-45deg);
 }
 
-footer.footer{
+footer{
   background-color: var(--color-secondary-darker);
-  height: 300px;
+  min-height: 300px;
   flex-shrink: 0;
   margin-top: auto;
+  color: var(--color-primary-contrast);
+}
+
+div.footer{
+  max-width: 1200px;
+  width: 90%;
+  min-height: 300px;
+  height: 100%;
+  margin-inline: auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 3rem 2rem;
+}
+
+div.footer-container{
+  display: flex;
+  justify-content: space-between;
+  align-items: start;
+  margin-bottom: 3rem;
+}
+
+div.footer-container h3{
+  font-size: var(--text-20);
+  margin: 1rem 0 2rem;
+}
+
+div.footer-container li{
+  margin-bottom: 0.25rem;
+}
+
+div.footer-container a{
+  font-size: var(--text-18);
+  font-weight: var(--weight-medium);
+  color: var(--color-primary-contrast);
+}
+
+div.contact-container h4, div.contact-container svg.contact-icon{
+  font-size: var(--text-18);
+  font-weight: var(--weight-medium);
+}
+
+div.contact-container p{
+  font-size: var(--text-16);
+  font-weight: var(--weight-regular);
+}
+
+div.contact-container{
+  display: flex;
+  align-items: baseline;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+div.footer > p{
+  font-size: var(--text-16);
+  text-align: center;
 }
 
 div.hero-section{
@@ -297,7 +353,7 @@ p.service-description{
 div.services-container{
   display: flex;
   text-align: center;
-  gap : 6rem;
+  gap : 4rem;
 }
 
 div.service{
@@ -386,14 +442,13 @@ div.testimonials-acoddion-item{
   backdrop-filter: blur(9.4px);
   -webkit-backdrop-filter: blur(9.4px);
   border: 1px solid rgba(250, 243, 224, 0.47);
-  /* background: linear-gradient(135deg, var(--color-primary-darker), var(--color-primary-contrast)); */
   border-radius: 1rem;
   padding: 2rem;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   height: 25rem;
-  flex: 0 0 15rem;
+  flex: 0 0 12rem;
   cursor: pointer;
   position: relative;
   overflow: hidden;
@@ -538,7 +593,7 @@ section.services-page-header{
 }
 
 section.services-page-header::after{
-  content: " ";
+  content: "";
   width: 100%;
   height: 100%;
   position: absolute;
@@ -570,7 +625,7 @@ button.filter-btn{
   font-weight: var(--weight-medium);
   border-radius: 5px;
   padding: 1rem 2rem;
-  margin-inline: 2rem;
+  margin-inline: 2rem; 
   cursor: pointer;
   transition: 0.3s ease-out transform;
 }
@@ -651,14 +706,13 @@ p.our-story-text{
 }
 
 div.our-staff-container{
-  display: flex;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
   gap: 3rem;
   justify-content: center;
 }
 
 div.staff-container{
-  width: 30%;
   position: relative;
   overflow: hidden;
 }
@@ -724,11 +778,10 @@ div.staff-container:hover div.staff-detail-container > p{
   transform: translate3d(0, 0, 0);
 }
 
-div.reaseons-container{
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
+div.reasons-container{
+  display: flex;
+  justify-content: center;
   gap: 3rem;
-  align-items: center;
 }
 
 div.reason{
@@ -962,7 +1015,7 @@ div.stylist-container{
 }
 
 div.stylist-container > img{
-  width: 25%;
+  width: 33%;
 }
 
 div.stylist-info{
@@ -997,7 +1050,7 @@ div.date-picker-heading button:hover{
   background-color: var(--color-primary);
 }
 
-div.date-picker-calendar{
+div.date-picker-calendar, div.time-picker{
   display: grid;
   grid-template-columns: repeat(7, 1fr);
   gap: 1rem;
@@ -1005,7 +1058,7 @@ div.date-picker-calendar{
   margin-bottom: 3rem;
 }
 
-div.date-picker-calendar h3{
+div.date-picker-calendar h3, div.time-picker h3{
   font-size: var(--text-20);
   font-weight: var(--weight-semibold);
 }
@@ -1197,23 +1250,303 @@ h3.error-message{
   }
 }
 
-@media only screen and (max-width: 730px){
-    div.steps-container{
-      display: none;
-    }
-    div.steps-container-sm{
-      display: flex;
-    }
+@media only screen and (max-width: 1096px){
+  div.services-container{
+    gap : 3rem;
+  }
 
-    div.menu{
-      display: flex;
-    }
+  div.service{
+    padding: 1.5rem;
+  }
 
-    ul.nav-list{
-      display: none;
-    }
+  div.testimonials-acoddion-item{
+    flex: 0 0 10rem;
 
-    div.nav-container-sm-opened{
-      display: block;
-    }
+  }
+  div.opened {
+    flex-basis: 27rem;
+  }
+
+  div.gallery-container{
+    grid-template-columns: repeat(3, minmax(200px, 1fr));
+  }
+
+  div.item-1,
+  div.item-7,
+  div.item-9,
+  div.item-11{
+    grid-row: span 16
+  }
+
+  div.item-2,
+  div.item-3,
+  div.item-5,
+  div.item-8,
+  div.item-12{
+    grid-row: span 12
+  }
+
+  div.item-4,
+  div.item-6,
+  div.item-10,
+  div.item-13{
+    grid-row: span 8
+  }
+
+  div.CTA-container{
+    padding-inline: 15rem;
+  }
+
+  div.reasons-container{
+    gap: 1rem;
+  }
+
+  div.reason{
+    padding: 2rem;
+  }
+
+  div.booking-steps-container{
+    width: 90%;
+  }
+
+  div.service-selection-container{
+    gap: 1rem;
+  }
+
+  div.service-container{
+    padding: 1rem;
+  }
+
+  div.addon-container{
+    padding-left: 7.5rem;
+  }
+
+  div.stylist-container{
+    gap: 1rem;
+  }
+
+  div.time-picker{
+    grid-template-columns: repeat(6, 1fr);
+  }
 }
+
+
+@media only screen and (max-width: 900px){
+  html{
+    font-size: 56.25%;
+  }
+
+  div.CTA-container{
+    padding-inline: 10rem;
+  }
+
+  div.our-staff-container{
+    gap: 2rem;
+  }
+
+  p.step-description{
+    font-size: var(--text-16);
+  }
+
+  div.services-container{
+    gap : 1rem;
+  }
+
+  div.booking-status-container{
+    padding-inline: 5rem;
+  }
+}
+
+
+
+@media only screen and (max-width: 750px){
+  html{
+    font-size: 50%;
+  }
+
+  div.menu{
+    display: flex;
+  }
+
+  ul.nav-list{
+    display: none;
+  }
+
+  div.nav-container-sm-opened{
+    display: block;
+  }
+
+  div.services-container{
+    flex-direction: column;
+  }
+
+  div.service{
+    padding: 5rem;
+  }
+
+  div.about-us-container{
+    display: flex;
+    gap: 2rem;
+  }
+
+  div.gallery-container{
+    grid-template-columns: repeat(2, minmax(200px, 1fr));
+  }
+
+  div.item-1,
+  div.item-5,
+  div.item-12{
+    grid-row: span 16
+  }
+
+  div.item-3,
+  div.item-7,
+  div.item-8,
+  div.item-11{
+    grid-row: span 12
+  }
+
+  div.item-2,
+  div.item-4,
+  div.item-6,
+  div.item-9,
+  div.item-10,
+  div.item-13{
+    grid-row: span 8
+  }
+
+  div.testimonials-acoddion-item{
+    flex: 0 0 7rem;
+
+  }
+  div.opened {
+    flex-basis: 19rem;
+  }
+  
+  div.CTA-container{
+    padding-inline: 7rem;
+  }
+
+  div.services-card-container{
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  div.our-staff-container{
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  div.steps-container{
+    display: none;
+  }
+  div.steps-container-sm{
+    display: flex;
+  }
+
+  div.service-selection-container{
+    grid-template-columns: 1fr;
+  }
+
+  div.time-picker{
+    grid-template-columns: repeat(5, 1fr);
+  }
+
+  div.date-picker-calendar, div.time-picker{
+    gap: 0.5rem;
+  }
+
+  div.personal-info-input{
+    width: 90%;
+    margin-inline: auto;
+  }
+
+  div.booking-status-container {
+    padding-inline: 3rem;
+  }
+ 
+}
+
+@media only screen and (max-width : 550px){
+
+  div.footer-container{
+    flex-direction: column; 
+  }
+
+  div.hero-section{
+    flex-direction: column;
+    height: auto;
+  } 
+
+  div.about-us-container{
+    flex-direction: column;
+  }
+
+  img.salon-img{
+    width: 100%;
+    height: auto;
+  }
+
+  div.gallery-container{
+    grid-template-columns: minmax(200px, 1fr);
+  }
+
+  div.gallery-item{
+    grid-row: span 12;
+  }
+
+  div.testimonials-acoddion{
+    flex-direction: column;
+  }
+
+  div.testimonials-acoddion-item{
+    flex: 0 0 12rem;
+
+  }
+
+  div.opened {
+    flex-basis: 20rem;
+  }
+
+  div.CTA-container{
+    padding-inline: 3rem;
+  }
+
+  div.services-card-container{
+    grid-template-columns: repeat(1, 1fr);
+  }
+
+  button.filter-btn{
+    padding: 0.75rem 1.5rem;
+    margin-inline: 0.5rem;
+  }
+
+  div.our-staff-container{
+    grid-template-columns: repeat(1, 1fr);
+  }
+
+  div.reasons-container{
+    flex-direction: column;
+  }
+
+  div.booking-steps-container{
+    width: 100%;
+    padding: 2rem;
+  }
+
+  div.day-container{
+    padding: 0.75rem 1rem;
+  }
+
+  div.time-picker{
+    grid-template-columns: repeat(4, 1fr);
+  }
+
+  div.booking-summary, div.total-summary{
+    margin: 5rem 0;
+  }
+
+  div.booking-status-container {
+    padding-inline: 0;
+  }
+  
+}
+

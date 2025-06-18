@@ -6,7 +6,7 @@ const CLOTHINGHOUR = 16
 const INTERVAL = 15
 
 
-const mockBookings = [
+export const mockBookings = [
   {
     bookingId: "BK001",
     selectedService: "hair-coloring",
@@ -260,7 +260,11 @@ const mockBookings = [
 ];
 
 
-export function getAvailableSlots(bookingDetails){
+export async function getAvailableSlots(bookingDetails){
+    const responce = await fetch('/api/bookings')
+    const data = await responce.json()
+    console.log(data)
+
     const bookings = mockBookings.filter(booking => isEqual(booking.selectedDate,bookingDetails.selectedDate) && booking.selectedStylist === bookingDetails.selectedStylist)
     
     let selectedServiceDuration = mainServices.find(service => service.id === bookingDetails.selectedService).duration

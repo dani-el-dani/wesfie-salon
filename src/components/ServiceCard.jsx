@@ -1,3 +1,5 @@
+import { Link } from "react-router"
+
 
 function ServiceCard({detail}){
     return(
@@ -7,7 +9,7 @@ function ServiceCard({detail}){
                 <h2>{detail.name}</h2>
                 <p>{detail.description}</p>
                 <h3>{detail.price} ETB &#x25cf; {detail.duration} Min</h3>
-                <a href="">Book Now <span>&rarr;</span></a>
+                <Link to='/booking' state={{service:detail.id}}>Book Now <span>&rarr;</span></Link>
             </div>
         </div>
     )

@@ -65,7 +65,7 @@ function AboutUs(){
                 <section className='why-us-section'>
                     <div className='section-container'>
                         <h2 className='section-title'>Why Choose Wesfie?</h2>
-                        <div className="reaseons-container">
+                        <div className="reasons-container">
                             <div className="reason">
                                 <p>A serene and professional environment designed for relaxation.</p>
                             </div>
