@@ -111,7 +111,7 @@ function Layout(){
                             </div>
                         </div>
                     </div>
-                    <p>Wesfie Salon &copy; All rigths reserved 2025</p>
+                    <p>Wesfie Salon &copy; 2025 All rigths reserved</p>
                 </div>
                 
             </footer>

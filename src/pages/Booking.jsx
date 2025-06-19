@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react"
+import { Link } from "react-router";
 import ServiceSelection from "../components/FormComponents/ServiceSelection";
 import { mainServices, addOns } from "../services";
 import AddOnsSelection from "../components/FormComponents/AddOnsSelection";
@@ -6,7 +7,7 @@ import StylistSelection from "../components/FormComponents/StylistSelection";
 import ConfirmBooking from "../components/FormComponents/ConfirmBooking";
 import { ethiopianDateNow, getNextDay, toDateString, parseDate } from "../utils/dateUtils";
 import DateSelection from "../components/FormComponents/DateSelaction";
-import { useOutletContext, useLocation } from "react-router";
+import { useOutletContext, useLocation, useNavigate, redirect } from "react-router";
 import PersonalInfo from "../components/FormComponents/PersonalInfo";
 import BookingStatus from "../components/FormComponents/BookingStatus";
 
@@ -23,19 +24,31 @@ const simulateServerRequest = (delay, data, shouldSucceed = true) => {
   });
 };
 
+const resetBookingDetail = {
+        selectedService : null,
+        addOns:[],
+        selectedStylist:null,
+        selectedDate:toDateString(getNextDay(ethiopianDateNow())),
+        selectedTime:null,
+        fullName:'fake name',
+        phoneNumber:'1234567890'
+
+    }
+
 function Booking(){
 
     const location = useLocation()
-
     const setIsCTAVisible = useOutletContext()
+
     const steps = ["Select service", "Select AddOns","Select stylist", "Book date and time", "Fill you information", "Confirm"]
     const [currentStep, setCurrentStep] = useState(location.state?.service ? 1 : 0)
     const [loading, setLoading] = useState(false)
+    const [bookingResponse, setBookingResponse] = useState(null)
     const [bookingDetail, setBookingDetail] = useState({
         selectedService : location.state?.service || null,
         addOns:[],
         selectedStylist:null,
-        selectedDate:getNextDay(ethiopianDateNow()),
+        selectedDate:toDateString(getNextDay(ethiopianDateNow())),
         selectedTime:null,
         fullName:'fake name',
         phoneNumber:'1234567890'
@@ -108,7 +121,7 @@ function Booking(){
 
         setBookingDetail(prevBookingDetail => ({
             ...prevBookingDetail,
-            [name] : name === 'selectedDate'? parseDate(value) : value
+            [name] : value
         }))
 
         if(name === 'selectedDate'){
@@ -127,34 +140,58 @@ function Booking(){
 
     }
 
+    function reload(){
+        setBookingDetail(resetBookingDetail)
+        setCurrentStep(0)
+    }
+
+    async function handelbooking(){
+        setLoading(true)
+        setError(null)
+        try{
+            const response = await fetch("/api/book", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(bookingDetail),
+            })
+
+            if(!response.ok){
+                throw { message: 'Request timed out', status: 408 }
+            }
+
+            const data = await response.json()
+            setBookingResponse(data.bookings)
+        }catch(err){
+            console.log(err)
+            setError(err)
+
+        }finally{
+            setLoading(false)
+            if( currentStep < steps.length){
+                setCurrentStep(prev => prev + 1)
+            }
+            
+        }
+        window.scrollTo(0, 0); 
+    }
+
     async function handleFormSubmition(e){
         e.preventDefault()
-        if(validateForm()){
-            if(currentStep < steps.length-1){
-                setCurrentStep(prevCurrentStep => prevCurrentStep + 1)
-            }
-
-            else{
-                setLoading(true)
-                try{
-                    const response = await simulateServerRequest(3000, { message: 'Data from server' }, true);
-                }catch(err){
-
-                }finally{
-                    setLoading(false)
-                }
-                setCurrentStep(prev => prev + 1)
-                
-            }
-
-            window.scrollTo(0, 0);
-        }
-        
+        await handelbooking()   
     }
 
     function handleBackButton(){
         setCurrentStep(prevCurrentStep => prevCurrentStep - 1)
         window.scrollTo(0, 0);
+    }
+
+    function handleNextButton(){
+        if(validateForm()){
+            setCurrentStep(prevCurrentStep => prevCurrentStep + 1)
+            window.scrollTo(0, 0);
+        }
     }
 
     
@@ -190,7 +227,7 @@ function Booking(){
                     </div>
 
                     <div className='booking-steps-container'>
-                        {currentStep < 6 
+                        {currentStep < steps.length 
                             ? <form onSubmit={(e) => handleFormSubmition(e)}>
                                 {currentStep === 0 && <ServiceSelection bookingDetail={bookingDetail} handleChange={handleChange} error={error}/>}
                                 {currentStep === 1 && <AddOnsSelection bookingDetail={bookingDetail} handleChange={handleAddOnsSelection} error={error}/>}
@@ -199,13 +236,36 @@ function Booking(){
                                 {currentStep === 4 && <PersonalInfo bookingDetail={bookingDetail} handleChange={handleChange} error={error}/>}
                                 {currentStep === 5 && <ConfirmBooking bookingDetail={bookingDetail}/>}
                                 <div className={`form-nav-btns ${currentStep === 0 ? 'first-step' : ''}`}>
-                                    {currentStep > 0 && <button className={`${!loading ? 'form-btn': ''}`} disabled={loading} onClick={handleBackButton} type='button'>Back</button>}
-                                    <button className={`${!loading ? 'form-btn': ''}`} disabled={loading} type='submit'>{currentStep === steps.length-1 ? 'Book' : 'Next'}</button>
+                                    {currentStep > 0 && <button className={`form-btn ${!loading ? 'form-btn-disabled' : ''}`} disabled={loading} onClick={handleBackButton} type='button'>Back</button>}
+                                    {currentStep === steps.length-1
+                                        ?<button className={`form-btn ${!loading ? 'form-btn-disabled' : ''}`} disabled={loading} key={'book'} type='submit'>Book</button>
+                                        :<button className={`form-btn ${!loading ? 'form-btn-disabled': ''}`} disabled={loading} key={'next'} onClick={handleNextButton} type='button'>Next</button>
+                                    }
                                 </div>
                                 
                             </form>
                             
-                            : <BookingStatus />
+                            : (<>
+                                {!loading 
+                                    ? <>
+                                        <BookingStatus error={error} bookingResponce={bookingResponse}/>
+                                        {!error && <div style={{textAlign:"center"}}>
+                                            <Link className='to-home-btn' to="/">Go to Home</Link>
+                                        </div>
+                                        }
+                                        {error && <div style={{textAlign:"center"}}>
+                                            <div className={`form-nav-btns`}>
+                                                <button className={`form-btn ${!loading ? 'form-btn-disabled' : ''}`} onClick={handelbooking}>Try Again</button>
+                                                <button className={`form-btn ${!loading ? 'form-btn-disabled' : ''}`} onClick={reload}>Reset</button>
+                                            </div>
+                                        </div>}
+                                    </>
+                                    : <>
+                                        <h1>Loading ...</h1>
+                                    </>
+                                }
+                            </>
+                            )
                         
                         }
 

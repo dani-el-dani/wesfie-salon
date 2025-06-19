@@ -4,6 +4,7 @@ import { createBrowserRouter, createRoutesFromElements, RouterProvider, Route, S
 import Services from "./pages/Services"
 import AboutUs from "./pages/AboutUs"
 import Booking from "./pages/Booking"
+import './server'
 
 
 function App() {

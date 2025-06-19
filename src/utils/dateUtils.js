@@ -84,7 +84,7 @@ export function getNextDay(date){
 
 export function toDateString(date){
   const properDate = getProperDate(date)
-  return `${properDate.year}-${properDate.month < 10 ? '0' + (properDate.month + 1) : (properDate.month + 1)}-${properDate.day < 10 ? '0' + properDate.day : properDate.day}`
+  return `${properDate.year}-${properDate.month + 1 < 10 ? '0' + (properDate.month + 1) : (properDate.month + 1)}-${properDate.day < 10 ? '0' + properDate.day : properDate.day}`
 }
 
 export function parseDate(dateString){

@@ -1,11 +1,12 @@
 
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import StepHeading from "./StepHeading"
 import { ethiopianDateNow, 
     getMonthDays, 
     getProperDate, 
     isEqual, 
     isPast, 
+    parseDate,
     ETMonths, 
     ETWeekDays, 
     toDateString, 
@@ -19,10 +20,25 @@ import { ethiopianDateNow,
 
 function DateSelection({bookingDetail, handleChange, error}){
 
-    const [currentMonth, setCurrentMonth] = useState(bookingDetail.selectedDate.month)
-    const [currentYear, setCurrentYear] = useState(bookingDetail.selectedDate.year)
+    const [currentMonth, setCurrentMonth] = useState(parseDate(bookingDetail.selectedDate).month)
+    const [currentYear, setCurrentYear] = useState(parseDate(bookingDetail.selectedDate).year)
+    const [loading, setLoading] = useState(false)
     const curentGCdate = ethiopianToGregorian({year:currentYear,month:currentMonth,day:1})
-    const timeSlots = async () => await getAvailableSlots(bookingDetail)
+    const [timeSlots, setTimeSlots] = useState([])
+
+    useEffect(() =>{
+        function getTimeSlots(){
+            setLoading(false)    
+            getAvailableSlots(bookingDetail).then((res) => {
+                setTimeSlots(res)
+                setLoading(true)
+            })
+        }
+
+        getTimeSlots()
+
+    },[bookingDetail.selectedDate])
+
     
     function handlePrevMonth(){
     let prevCurrentMonth = currentMonth - 1
@@ -66,6 +82,7 @@ function DateSelection({bookingDetail, handleChange, error}){
                         )
                     )}
                 {getMonthDays(currentYear, currentMonth).map(day =>{
+
                     const date = getProperDate({year:currentYear, month:currentMonth, day:day})
                     const gcDate = ethiopianToGregorian(date)
                     return(
@@ -77,7 +94,7 @@ function DateSelection({bookingDetail, handleChange, error}){
                                 id={day}
                                 className='date-radio-btn'
                                 disabled={isPast(date,getNextDay(ethiopianDateNow()))}
-                                checked={isEqual(date,bookingDetail.selectedDate)}
+                                checked={isEqual(date,parseDate(bookingDetail.selectedDate))}
                                 onChange={(e) => handleChange(e)}
                             />
                             <label htmlFor={day}>
@@ -108,7 +125,7 @@ function DateSelection({bookingDetail, handleChange, error}){
 
             <div className='time-picker'>
 
-                {timeSlots.map( (slot) => {
+                {loading && timeSlots.map( (slot) => {
                     return (
                     
                     <div key={toDateString(bookingDetail.selectedDate) + slot}>

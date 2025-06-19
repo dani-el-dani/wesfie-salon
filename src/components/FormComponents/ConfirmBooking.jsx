@@ -1,6 +1,6 @@
 import { mainServices, addOns } from "../../services"
 import { staffs } from "../../staff"
-import { ETtoString } from "../../utils/dateUtils"
+import { ETtoString, parseDate } from "../../utils/dateUtils"
 import StepHeading from "./StepHeading"
 import { GiComb } from "react-icons/gi"
 import { FiPhone, FiUser, FiCalendar, FiClock } from "react-icons/fi";
@@ -63,7 +63,7 @@ function ConfirmBooking({bookingDetail}){
                         <FiCalendar className='detail-icon'/> 
                         <div className='detail-info'>
                             <h3>Date</h3>
-                            <p>{ETtoString(bookingDetail.selectedDate)}</p>
+                            <p>{ETtoString(parseDate(bookingDetail.selectedDate))}</p>
 
                         </div>
                     </div>
