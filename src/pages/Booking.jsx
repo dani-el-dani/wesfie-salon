@@ -1,28 +1,14 @@
-import { useEffect, useState } from "react"
+import { useState } from "react"
 import { Link } from "react-router";
 import ServiceSelection from "../components/FormComponents/ServiceSelection";
-import { mainServices, addOns } from "../services";
 import AddOnsSelection from "../components/FormComponents/AddOnsSelection";
 import StylistSelection from "../components/FormComponents/StylistSelection";
 import ConfirmBooking from "../components/FormComponents/ConfirmBooking";
 import { ethiopianDateNow, getNextDay, toDateString, parseDate } from "../utils/dateUtils";
 import DateSelection from "../components/FormComponents/DateSelaction";
-import { useOutletContext, useLocation, useNavigate, redirect } from "react-router";
+import { useLocation } from "react-router";
 import PersonalInfo from "../components/FormComponents/PersonalInfo";
 import BookingStatus from "../components/FormComponents/BookingStatus";
-
-
-const simulateServerRequest = (delay, data, shouldSucceed = true) => {
-  return new Promise((resolve, reject) => {
-    setTimeout(() => {
-      if (shouldSucceed) {
-        resolve({ data: data, status: 200 });
-      } else {
-        reject({ message: 'Request timed out', status: 408 });
-      }
-    }, delay);
-  });
-};
 
 const resetBookingDetail = {
         selectedService : null,
@@ -38,7 +24,6 @@ const resetBookingDetail = {
 function Booking(){
 
     const location = useLocation()
-    const setIsCTAVisible = useOutletContext()
 
     const steps = ["Select service", "Select AddOns","Select stylist", "Book date and time", "Fill you information", "Confirm"]
     const [currentStep, setCurrentStep] = useState(location.state?.service ? 1 : 0)
@@ -50,16 +35,10 @@ function Booking(){
         selectedStylist:null,
         selectedDate:toDateString(getNextDay(ethiopianDateNow())),
         selectedTime:null,
-        fullName:'fake name',
-        phoneNumber:'1234567890'
+        fullName:'',
+        phoneNumber:''
 
     })
-
-
-    useEffect(() =>{
-        setIsCTAVisible(false)
-        return () => setIsCTAVisible(true)
-    },[])
 
     const [error,setError] = useState(null)
 
@@ -80,14 +59,22 @@ function Booking(){
         }
 
         if(currentStep === 4){
+            const phoneregex = /^(09|07)\d{8}$/
             if(bookingDetail.fullName.length === 0){
                 setError(prevError => ({...prevError, fullNameError:'Please fill this field name is required'}))
                 isValid = false
             }
+
             if(bookingDetail.phoneNumber.length === 0){
                 setError(prevError => ({...prevError, phoneNumberError:'Please fill this field phone number is required'}))
                 isValid = false
             }
+
+            else if(!phoneregex.test(bookingDetail.phoneNumber)){
+                setError(prevError => ({...prevError, phoneNumberError:'Invalid phone number Please fill a valid phone number'}))
+                isValid = false
+            }
+
         }
         
         return isValid
@@ -204,7 +191,7 @@ function Booking(){
                         {steps.map((step, index) => (
                             <div 
                                 key={index} 
-                                className={`step ${index <= currentStep ?'finished-step' :''} ${index === currentStep ? 'current-step' : ''}`}
+                                className={`step ${index <= currentStep ? 'finished-step' : ''} ${index === currentStep ? 'current-step' : ''}`}
                             >
                                 <span className='step-number'>{index + 1}</span>
                                 <p className='step-description'>{step}</p>
@@ -215,13 +202,12 @@ function Booking(){
                         <span className='step-number'>{Math.min(currentStep + 1, steps.length)}</span>
                         <p className='step-description'>{steps[Math.min(currentStep, steps.length - 1)]}</p>
                         <div className='step-box-container'>
-                            {steps.map((step, index) => (
-                                
-                                    <div 
-                                        key={index} 
-                                        className={`step-sm ${index < currentStep ? 'finished-step-sm' : ''} ${index === currentStep ? 'current-step-sm' : ''}`}
-                                    >
-                                    </div>    
+                            {steps.map((step, index) => (    
+                                <div 
+                                    key={index} 
+                                    className={`step-sm ${index < currentStep ? 'finished-step-sm' : ''} ${index === currentStep ? 'current-step-sm' : ''}`}
+                                >
+                                </div>    
                             ))}
                         </div>
                     </div>
@@ -236,10 +222,10 @@ function Booking(){
                                 {currentStep === 4 && <PersonalInfo bookingDetail={bookingDetail} handleChange={handleChange} error={error}/>}
                                 {currentStep === 5 && <ConfirmBooking bookingDetail={bookingDetail}/>}
                                 <div className={`form-nav-btns ${currentStep === 0 ? 'first-step' : ''}`}>
-                                    {currentStep > 0 && <button className={`form-btn ${!loading ? 'form-btn-disabled' : ''}`} disabled={loading} onClick={handleBackButton} type='button'>Back</button>}
+                                    {currentStep > 0 && <button className={`form-btn ${!loading ? 'form-btn-enabled' : 'form-btn-disabled' }`} disabled={loading} onClick={handleBackButton} type='button'>Back</button>}
                                     {currentStep === steps.length-1
-                                        ?<button className={`form-btn ${!loading ? 'form-btn-disabled' : ''}`} disabled={loading} key={'book'} type='submit'>Book</button>
-                                        :<button className={`form-btn ${!loading ? 'form-btn-disabled': ''}`} disabled={loading} key={'next'} onClick={handleNextButton} type='button'>Next</button>
+                                        ?<button className={`form-btn ${!loading ? 'form-btn-enabled' : 'form-btn-disabled' }`} disabled={loading} key={'book'} type='submit'>Book</button>
+                                        :<button className={`form-btn ${!loading ? 'form-btn-enabled' : 'form-btn-disabled'}`} disabled={loading} key={'next'} onClick={handleNextButton} type='button'>Next</button>
                                     }
                                 </div>
                                 
@@ -255,14 +241,12 @@ function Booking(){
                                         }
                                         {error && <div style={{textAlign:"center"}}>
                                             <div className={`form-nav-btns`}>
-                                                <button className={`form-btn ${!loading ? 'form-btn-disabled' : ''}`} onClick={handelbooking}>Try Again</button>
-                                                <button className={`form-btn ${!loading ? 'form-btn-disabled' : ''}`} onClick={reload}>Reset</button>
+                                                <button className={`form-btn ${!loading ? 'form-btn-enabled' : 'form-btn-disabled' }`} onClick={handelbooking}>Try Again</button>
+                                                <button className={`form-btn ${!loading ? 'form-btn-enabled' : 'form-btn-disabled' }`} onClick={reload}>Reset</button>
                                             </div>
                                         </div>}
                                     </>
-                                    : <>
-                                        <h1>Loading ...</h1>
-                                    </>
+                                    : <h1 className='loading'>Loading...</h1>
                                 }
                             </>
                             )

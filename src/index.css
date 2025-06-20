@@ -897,7 +897,7 @@ button.form-btn, a.to-home-btn{
   font-size: var(--text-16);
   font-weight: var(--weight-bold);
   cursor: pointer;
-  transition: 0.25s ease-out transform;
+  transition: 0.25s ease-out all;
 }
 
 
@@ -905,8 +905,9 @@ button.form-btn:disabled{
   background-color: var(--color-secondary-light);
 }
 
-button.form-btn-disabled, a.to-home-btn:hover{
-  transform: scale(1.1);
+button.form-btn-enabled:hover, a.to-home-btn:hover{
+  background-color: var(--color-secondary-bold);
+  color: var(--color-primary-contrast);
 }
 
 div.step-heading{
@@ -936,11 +937,12 @@ div.service-container{
   padding: 2rem;
   height: 100%;
   cursor: pointer;
-  transition: 0.2s ease-in transform;
+  transition: 0.2s ease-in all;
 }
 
 div.service-container:hover{
-  transform: scale(1.035);
+  background-color: var(--color-secondary);
+  color: var(--color-primary-lightest);
 }
 
 div.service-container  h3{
@@ -962,6 +964,10 @@ input[type=radio]{
   appearance: none;
   display: none;
   margin: 0;
+}
+
+input[type=radio]:disabled {
+  opacity: 0.5;
 }
 
 input.services-radio-btn:checked + label > div.service-container{
@@ -1068,7 +1074,11 @@ div.day-container{
   border-radius: 5px;
 }
 
-div.day-container:hover{
+input[type=radio]:disabled+label > div.day-container{
+  opacity: 0.5;
+}
+
+div.day-enabled:hover{
   background-color: var(--color-secondary-light);
   color: var(--color-primary-contrast);
 }
@@ -1234,6 +1244,13 @@ div.status-detail-info p{
   font-size: var(--text-16);
 }
 
+h1.loading{
+  font-size: var(--text-24);
+  font-weight: var(--weight-bold);
+  color: var(--color-secondary-darker);
+  text-align: center;
+}
+
 h3.error-message{
   font-size: var(--text-16);
   color: red;
@@ -1252,6 +1269,18 @@ h3.error-message{
   }
   div.staff-container > img{
     transform: scale(1);
+  }
+  div.service-container:hover{
+    background-color: inherit;
+    color: var(--color-secondary);
+  }
+  div.day-enabled:hover{
+    background-color: inherit;
+    color: var(--color-secondary);
+  }
+  button.form-btn-enabled:hover{
+    background-color: var(--color-secondary);
+    color: var(--color-primary-lightest);
   }
 }
 

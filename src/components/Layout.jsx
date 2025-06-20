@@ -1,13 +1,24 @@
 import logo from '../assets/images/logo.png'
 import logoFooter from '../assets/images/logo_primary_color.png'
-import { useState } from 'react'
-import { Link, NavLink, Outlet } from 'react-router'
+import { useEffect, useState } from 'react'
+import { Link, NavLink, Outlet, useLocation } from 'react-router'
 import { FiPhone, FiMail } from 'react-icons/fi'
 
 function Layout(){
 
     const [isCTAVisible, setIsCTAVisible] = useState(true)
     const [isMenuOpened, setIsMenuOpened] = useState(false)
+    const location = useLocation()
+
+    useEffect(() => {
+        setIsMenuOpened(false)
+        if(location.pathname.includes('booking')){
+            setIsCTAVisible(false)
+        }
+        else{
+            setIsCTAVisible(true)
+        }
+    },[location.pathname])
     
 
     return(
@@ -19,7 +30,7 @@ function Layout(){
                         <span></span>
                         <span></span>
                     </div>
-                    <Link to='/' onClick={() => setIsMenuOpened(false)}><img id='logo' src={logo} alt="Logo of Wesfie Salon" /></Link>
+                    <Link to='/'><img id='logo' src={logo} alt="Logo of Wesfie Salon" /></Link>
                     <ul className='nav-list'>
                         <li className='nav-list-item'>
                             <NavLink 
@@ -44,15 +55,14 @@ function Layout(){
                             </NavLink>
                         </li>
                     </ul>
-                    {isCTAVisible && <Link to="booking" onClick={() => setIsMenuOpened(false)} className='nav-links CTA-btn'>Book Now</Link>}
+                    {isCTAVisible && <Link to="booking" className='nav-links CTA-btn'>Book Now</Link>}
                 </div>
 
                 <div className={`${isMenuOpened ? 'nav-container-sm-opened' : 'nav-container-sm'}`}>
                     <ul className='nav-list-sm'>
                         <li className='nav-list-item-sm'>
                             <NavLink 
-                                to=""
-                                onClick={() => setIsMenuOpened(false)} 
+                                to="" 
                                 className={({ isActive }) => (isActive ? 'active-nav-link-sm nav-link-sm' : 'nav-link-sm')}
                                 end>
                                     Home
@@ -60,16 +70,14 @@ function Layout(){
                         </li>
                         <li className='nav-list-item-sm'>
                             <NavLink 
-                                to="services"
-                                onClick={() => setIsMenuOpened(false)} 
+                                to="services" 
                                 className={({ isActive }) => (isActive ? 'active-nav-link-sm nav-link-sm' : 'nav-link-sm')}>
                                     Services
                             </NavLink>
                         </li>
                         <li className='nav-list-item-sm'>
                             <NavLink 
-                                to="aboutus"
-                                onClick={() => setIsMenuOpened(false)} 
+                                to="aboutus" 
                                 className={({ isActive }) => (isActive ? 'active-nav-link-sm nav-link-sm' : 'nav-link-sm')}>
                                     About us
                             </NavLink>
@@ -78,12 +86,12 @@ function Layout(){
                 </div>                
             </nav>
         
-            <Outlet context={setIsCTAVisible}/>
+            <Outlet/>
 
             <footer >
                 <div className='footer'>
                     <div className='footer-container'>
-                        <Link to='/' onClick={() => setIsMenuOpened(false)}><img id='logo' src={logoFooter} alt="Logo of Wesfie Salon" /></Link>
+                        <Link to='/'><img id='logo' src={logoFooter} alt="Logo of Wesfie Salon" /></Link>
                         <div className='footer-nav-container'>
                             <h3>Go to</h3>
                             <ul>

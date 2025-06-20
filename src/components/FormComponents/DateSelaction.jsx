@@ -93,22 +93,13 @@ function DateSelection({bookingDetail, handleChange, error}){
                                 value={toDateString(date)}
                                 id={day}
                                 className='date-radio-btn'
-                                disabled={isPast(date,getNextDay(ethiopianDateNow()))}
+                                disabled={isPast(date,getNextDay(ethiopianDateNow())) || !loading}
                                 checked={isEqual(date,parseDate(bookingDetail.selectedDate))}
                                 onChange={(e) => handleChange(e)}
                             />
                             <label htmlFor={day}>
                                 <div 
-                                    className={`day-container 
-                                        ${date.month !== currentMonth
-                                            ?'not-current-month'
-                                            :undefined} 
-                                        ${isEqual(date, ethiopianDateNow())
-                                            ?'today'
-                                            :undefined
-                                        }
-                                        `
-                                    } 
+                                    className={`day-container ${date.month !== currentMonth ? 'not-current-month':''} ${isEqual(date, ethiopianDateNow())?'today':''} ${isPast(date,getNextDay(ethiopianDateNow())) || !loading?'day-disabled':'day-enabled'}`} 
                                     
                                 >
                                     <h3>{date.day}</h3>
@@ -123,37 +114,36 @@ function DateSelection({bookingDetail, handleChange, error}){
             
             <StepHeading title='Select a Time' description='Choose an available time slot for your appointment'/>
 
-            <div className='time-picker'>
+            {loading ? timeSlots.length === 0 ? <h1 className='loading'>No available times please select another day</h1> : <div className='time-picker'>
 
-                {loading && timeSlots.map( (slot) => {
-                    return (
-                    
-                    <div key={toDateString(bookingDetail.selectedDate) + slot}>
-                        <input 
-                            type="radio"
-                            name='selectedTime'
-                            value={slot}
-                            id={slot}
-                            className='date-radio-btn'
-                            checked={bookingDetail.selectedTime === slot}
-                            onChange={(e) => {handleChange(e)}}
-                        />
-                        <label htmlFor={slot}>
-                            <div 
-                                key={slot}
-                                className={`day-container`
-                                }                                     
-                            >
-                                <h3>{slot.split(" ").slice(0,1)}</h3>
-                                <h4>{slot.split(" ").slice(1)}</h4>
-                            </div>
-                        </label>
-                    
-                    </div>
-                )}
-
-                )}
+                 { timeSlots.map( (slot) => {
+                    return (                    
+                        <div key={toDateString(bookingDetail.selectedDate) + slot}>
+                            <input 
+                                type="radio"
+                                name='selectedTime'
+                                value={slot}
+                                id={slot}
+                                className='date-radio-btn'
+                                checked={bookingDetail.selectedTime === slot}
+                                onChange={(e) => {handleChange(e)}}
+                            />
+                            <label htmlFor={slot}>
+                                <div 
+                                    key={slot}
+                                    className={`day-container day-enabled`
+                                    }                                     
+                                >
+                                    <h3>{slot.split(" ").slice(0,1)}</h3>
+                                    <h4>{slot.split(" ").slice(1)}</h4>
+                                </div>
+                            </label>
+                        
+                        </div>
+                    )})}
+                
             </div>
+            : <h1 className='loading'>Loading avilable time slots...</h1>}
 
             {error?.selectedTimeError && <h3 className='error-message'>{error.selectedTimeError}</h3>}
         </>

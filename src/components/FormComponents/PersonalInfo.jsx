@@ -14,7 +14,7 @@ function PersonalInfo({bookingDetail, handleChange, error}){
                 </div>
                 <div className='personal-info-input'>
                     <label htmlFor='phoneNumber'><h3>Phone Number:</h3></label>
-                    <input type="tel" id='phoneNumber' name='phoneNumber' value={bookingDetail.phoneNumber} onChange={(e) => handleChange(e)}/>
+                    <input type="tel" id='phoneNumber' name='phoneNumber' placeholder="eg. 0912345678/0712345678" value={bookingDetail.phoneNumber} onChange={(e) => handleChange(e)}/>
                     {error?.phoneNumberError && <h3 className='error-message'>{error.phoneNumberError}</h3>}
                 </div>
             </div>

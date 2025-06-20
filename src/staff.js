@@ -1,12 +1,12 @@
-import betty from './assets/images/staff/BetelhemGetachew.png'
-import hani from './assets/images/staff/HannaTeferi.png'
-import lidu from './assets/images/staff/LidiyaDemissie.png'
-import maki from './assets/images/staff/MeklitAbebe.png'
-import mimi from './assets/images/staff/MimiAssefa.png'
-import rich from './assets/images/staff/RahelMekuria.png'
-import ruth from './assets/images/staff/RuthAlemu.png'
-import sari from './assets/images/staff/SaraYilma.png'
-import seli from './assets/images/staff/SelamTesfaye.png'
+import betty from './assets/images/staff/BetelhemGetachew.jpg'
+import hani from './assets/images/staff/HannaTeferi.jpg'
+import lidu from './assets/images/staff/LidiyaDemissie.jpg'
+import maki from './assets/images/staff/MeklitAbebe.jpg'
+import mimi from './assets/images/staff/MimiAssefa.jpg'
+import rich from './assets/images/staff/RahelMekuria.jpg'
+import ruth from './assets/images/staff/RuthAlemu.jpg'
+import sari from './assets/images/staff/SaraYilma.jpg'
+import seli from './assets/images/staff/SelamTesfaye.jpg'
 
 
 export const staffs = [
