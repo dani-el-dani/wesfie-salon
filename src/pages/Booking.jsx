@@ -16,8 +16,8 @@ const resetBookingDetail = {
         selectedStylist:null,
         selectedDate:toDateString(getNextDay(ethiopianDateNow())),
         selectedTime:null,
-        fullName:'fake name',
-        phoneNumber:'1234567890'
+        fullName:'',
+        phoneNumber:''
 
     }
 
