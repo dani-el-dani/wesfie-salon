@@ -246,6 +246,19 @@ div.contact-container{
   margin-bottom: 1rem;
 }
 
+div.socials-container{
+  text-align: center;
+  display: flex;
+  gap: 1.5rem;
+  font-size: var(--text-32);
+  justify-content: center;
+  margin-bottom: 3rem;
+}
+
+div.socials-container a{
+  color: var(--color-primary-contrast);
+}
+
 div.footer > p{
   font-size: var(--text-16);
   text-align: center;
@@ -399,6 +412,7 @@ section.about-us-section, section.mission-section{
 div.about-us-container{
   display: flex;
   gap: 5rem;
+  overflow: hidden;
 }
 
 img.salon-img{
@@ -474,7 +488,7 @@ img.avatar{
 }
 
 p.rating{
-  font-size: var(--text-20);
+  font-size: var(--text-48);
 }
 
 h3.profile-name{
@@ -872,6 +886,7 @@ div.booking-steps-container{
   background-color: var(--color-primary-darker);
   padding: 5rem;
   border-radius: 25px;
+  overflow: hidden;
 }
 
 div.form-nav-btns{
@@ -1532,12 +1547,12 @@ h3.error-message{
   }
 
   div.testimonials-acoddion-item{
-    flex: 0 0 12rem;
+    flex: 0 0 12.5rem;
 
   }
 
   div.opened {
-    flex-basis: 20rem;
+    flex-basis: 25rem;
   }
 
   div.CTA-container{

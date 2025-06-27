@@ -3,6 +3,9 @@ import logoFooter from '../assets/images/logo_primary_color.png'
 import { useEffect, useState } from 'react'
 import { Link, NavLink, Outlet, useLocation } from 'react-router'
 import { FiPhone, FiMail } from 'react-icons/fi'
+import { FaTelegram, FaTiktok, FaFacebook, FaInstagram, FaTwitter } from 'react-icons/fa'
+import { SiTiktok } from 'react-icons/si'
+import { motion } from 'motion/react'
 
 function Layout(){
 
@@ -58,7 +61,7 @@ function Layout(){
                     {isCTAVisible && <Link to="booking" className='nav-links CTA-btn'>Book Now</Link>}
                 </div>
 
-                <div className={`${isMenuOpened ? 'nav-container-sm-opened' : 'nav-container-sm'}`}>
+                <motion.div layout className={`${isMenuOpened ? 'nav-container-sm-opened' : 'nav-container-sm'}`}>
                     <ul className='nav-list-sm'>
                         <li className='nav-list-item-sm'>
                             <NavLink 
@@ -83,7 +86,7 @@ function Layout(){
                             </NavLink>
                         </li>
                     </ul>
-                </div>                
+                </motion.div>                
             </nav>
         
             <Outlet/>
@@ -118,6 +121,13 @@ function Layout(){
                                 </div>
                             </div>
                         </div>
+                    </div>
+                    <div className='socials-container'>
+                        <a href="#"><FaFacebook/></a>
+                        <a href="#"><FaInstagram/></a>
+                        <a href="#"><FaTwitter/></a>
+                        <a href="#"><FaTiktok/></a>
+                        <a href="#"><FaTelegram/></a>
                     </div>
                     <p>Wesfie Salon &copy; 2025 All rigths reserved</p>
                 </div>

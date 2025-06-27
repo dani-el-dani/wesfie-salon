@@ -1,7 +1,9 @@
+import { div } from "motion/react-client"
 import PageHeader from "../components/PageHeader"
 import ServiceCard from "../components/ServiceCard"
 import { mainServices } from "../services"
 import { useSearchParams, Link } from "react-router"
+import { motion } from "motion/react"
 
 
 function Services(){
@@ -46,8 +48,11 @@ function Services(){
                         </div>
                         <div className="services-card-container">
                             {
-                                services.sort(() => Math.random() - 0.5).map((service) => {
-                                    return <ServiceCard key={service.id} detail={service}/>
+                                services.sort(() => Math.random() - 0.5).map((service, index) => {
+                                    return (
+                                        <ServiceCard key={service.id} detail={service} index={index}/>
+                                    )
+                                        
                                 })
                             }
                         </div>

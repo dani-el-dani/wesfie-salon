@@ -9,6 +9,26 @@ import DateSelection from "../components/FormComponents/DateSelaction";
 import { useLocation } from "react-router";
 import PersonalInfo from "../components/FormComponents/PersonalInfo";
 import BookingStatus from "../components/FormComponents/BookingStatus";
+import { motion, AnimatePresence } from "motion/react";
+
+const variants = {
+  initial: direction => {
+    return {
+      x: direction === 'next' ? 200 : -200,
+      opacity: 0,      
+    }
+  },
+  animate: {
+    x: 0,
+    opacity: 1,
+  },
+  exit: direction => {
+    return {
+      x: direction === 'next' ? -200 : 200,
+      opacity: 0,
+    }
+  },
+}
 
 const resetBookingDetail = {
         selectedService : null,
@@ -27,6 +47,7 @@ function Booking(){
 
     const steps = ["Select service", "Select AddOns","Select stylist", "Book date and time", "Fill you information", "Confirm"]
     const [currentStep, setCurrentStep] = useState(location.state?.service ? 1 : 0)
+    const [moveDir, setMoveDir] = useState('next')
     const [loading, setLoading] = useState(false)
     const [bookingResponse, setBookingResponse] = useState(null)
     const [bookingDetail, setBookingDetail] = useState({
@@ -111,7 +132,7 @@ function Booking(){
             [name] : value
         }))
 
-        if(name === 'selectedDate'){
+        if(name === 'selectedDate' || name === 'selectedStylist'){
             setBookingDetail(prevBookingDetail => ({
                 ...prevBookingDetail,
                 selectedTime : null
@@ -121,7 +142,10 @@ function Booking(){
         if(name === 'selectedService'){
             setBookingDetail(prevBookingDetail => ({
                 ...prevBookingDetail,
-                addOns : []
+                addOns : [],
+                selectedStylist: null,
+                selectedTime: null
+                
             }))
         }
 
@@ -151,7 +175,6 @@ function Booking(){
             const data = await response.json()
             setBookingResponse(data.bookings)
         }catch(err){
-            console.log(err)
             setError(err)
 
         }finally{
@@ -170,12 +193,14 @@ function Booking(){
     }
 
     function handleBackButton(){
+        setMoveDir('back')
         setCurrentStep(prevCurrentStep => prevCurrentStep - 1)
         window.scrollTo(0, 0);
     }
 
     function handleNextButton(){
         if(validateForm()){
+            setMoveDir('next')
             setCurrentStep(prevCurrentStep => prevCurrentStep + 1)
             window.scrollTo(0, 0);
         }
@@ -211,51 +236,52 @@ function Booking(){
                             ))}
                         </div>
                     </div>
-
-                    <div className='booking-steps-container'>
-                        {currentStep < steps.length 
-                            ? <form onSubmit={(e) => handleFormSubmition(e)}>
-                                {currentStep === 0 && <ServiceSelection bookingDetail={bookingDetail} handleChange={handleChange} error={error}/>}
-                                {currentStep === 1 && <AddOnsSelection bookingDetail={bookingDetail} handleChange={handleAddOnsSelection} error={error}/>}
-                                {currentStep === 2 && <StylistSelection bookingDetail={bookingDetail} handleChange={handleChange} error={error}/>}
-                                {currentStep === 3 && <DateSelection bookingDetail={bookingDetail} handleChange={handleChange} error={error}/>}
-                                {currentStep === 4 && <PersonalInfo bookingDetail={bookingDetail} handleChange={handleChange} error={error}/>}
-                                {currentStep === 5 && <ConfirmBooking bookingDetail={bookingDetail}/>}
-                                <div className={`form-nav-btns ${currentStep === 0 ? 'first-step' : ''}`}>
-                                    {currentStep > 0 && <button className={`form-btn ${!loading ? 'form-btn-enabled' : 'form-btn-disabled' }`} disabled={loading} onClick={handleBackButton} type='button'>Back</button>}
-                                    {currentStep === steps.length-1
-                                        ?<button className={`form-btn ${!loading ? 'form-btn-enabled' : 'form-btn-disabled' }`} disabled={loading} key={'book'} type='submit'>Book</button>
-                                        :<button className={`form-btn ${!loading ? 'form-btn-enabled' : 'form-btn-disabled'}`} disabled={loading} key={'next'} onClick={handleNextButton} type='button'>Next</button>
-                                    }
-                                </div>
-                                
-                            </form>
-                            
-                            : (<>
-                                {!loading 
-                                    ? <>
-                                        <BookingStatus error={error} bookingResponce={bookingResponse}/>
-                                        {!error && <div style={{textAlign:"center"}}>
-                                            <Link className='to-home-btn' to="/">Go to Home</Link>
-                                        </div>
+                    <AnimatePresence mode='popLayout' initial={false} custom={moveDir}>
+                        <motion.div key={steps[currentStep]} variants={variants} initial='initial' animate='animate' exit='exit' transition={{duration: 0.3}} custom={moveDir} className='booking-steps-container'>
+                            {currentStep < steps.length 
+                                ? <form onSubmit={(e) => handleFormSubmition(e)}>
+                                    
+                                        {currentStep === 0 ? <ServiceSelection bookingDetail={bookingDetail} handleChange={handleChange} error={error}/>
+                                        :currentStep === 1 ? <AddOnsSelection bookingDetail={bookingDetail} handleChange={handleAddOnsSelection} error={error}/>
+                                        :currentStep === 2 ? <StylistSelection bookingDetail={bookingDetail} handleChange={handleChange} error={error}/>
+                                        :currentStep === 3 ? <DateSelection bookingDetail={bookingDetail} handleChange={handleChange} error={error}/>
+                                        :currentStep === 4 ? <PersonalInfo bookingDetail={bookingDetail} handleChange={handleChange} error={error}/>
+                                        :<ConfirmBooking bookingDetail={bookingDetail}/>}
+                                    
+                                    <div className={`form-nav-btns ${currentStep === 0 ? 'first-step' : ''}`}>
+                                        {currentStep > 0 && <button className={`form-btn ${!loading ? 'form-btn-enabled' : 'form-btn-disabled' }`} disabled={loading} onClick={handleBackButton} type='button'>Back</button>}
+                                        {currentStep === steps.length-1
+                                            ?<button className={`form-btn ${!loading ? 'form-btn-enabled' : 'form-btn-disabled' }`} disabled={loading} key={'book'} type='submit'>Book</button>
+                                            :<button className={`form-btn ${!loading ? 'form-btn-enabled' : 'form-btn-disabled'}`} disabled={loading} key={'next'} onClick={handleNextButton} type='button'>Next</button>
                                         }
-                                        {error && <div style={{textAlign:"center"}}>
-                                            <div className={`form-nav-btns`}>
-                                                <button className={`form-btn ${!loading ? 'form-btn-enabled' : 'form-btn-disabled' }`} onClick={handelbooking}>Try Again</button>
-                                                <button className={`form-btn ${!loading ? 'form-btn-enabled' : 'form-btn-disabled' }`} onClick={reload}>Reset</button>
+                                    </div>
+                                    
+                                </form>
+                                
+                                : (<>
+                                    {!loading 
+                                        ? <>
+                                            <BookingStatus error={error} bookingResponce={bookingResponse}/>
+                                            {!error && <div style={{textAlign:"center"}}>
+                                                <Link className='to-home-btn' to="/">Go to Home</Link>
                                             </div>
-                                        </div>}
-                                    </>
-                                    : <h1 className='loading'>Loading...</h1>
-                                }
-                            </>
-                            )
-                        
-                        }
-
+                                            }
+                                            {error && <div style={{textAlign:"center"}}>
+                                                <div className={`form-nav-btns`}>
+                                                    <button className={`form-btn ${!loading ? 'form-btn-enabled' : 'form-btn-disabled' }`} onClick={handelbooking}>Try Again</button>
+                                                    <button className={`form-btn ${!loading ? 'form-btn-enabled' : 'form-btn-disabled' }`} onClick={reload}>Reset</button>
+                                                </div>
+                                            </div>}
+                                        </>
+                                        : <h1 className='loading'>Loading...</h1>
+                                    }
+                                </>
+                                )
                             
-                    </div>
-                    
+                            }
+                                
+                        </motion.div>
+                    </AnimatePresence>
 
                 </div>
                 

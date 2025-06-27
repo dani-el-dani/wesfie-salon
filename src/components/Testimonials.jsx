@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import avatarOne from '../assets/images/avatars/avatar-one.svg'
 import avatarTwo from '../assets/images/avatars/avatar-two.svg'
 import avatarThree from '../assets/images/avatars/avatar-three.svg'
@@ -6,6 +6,7 @@ import avatarFour from '../assets/images/avatars/avatar-four.svg'
 import avatarFive from '../assets/images/avatars/avatar-five.svg'
 import avatarSix from '../assets/images/avatars/avatar-six.svg'
 import avatarSeven from '../assets/images/avatars/avatar-seven.svg'
+import { FaQuoteLeft } from 'react-icons/fa6'
 
 const testimonials = [
     {
@@ -49,10 +50,23 @@ const testimonials = [
 
 function Testimonials(){
     const [opened, setOpened] = useState(0)
+
+    useEffect(() => {
+        const testimonialSlider = setTimeout(() => {
+            if(opened === testimonials.length -1)
+                setOpened(0)
+            else
+                setOpened(prev => prev + 1)
+        }, 3000);
+
+        return () => {clearTimeout(testimonialSlider)}
+    },[opened])
     function handelClick(index){
         if(opened !== index)
             setOpened(index)
     }
+
+
     return(
         <div className='testimonials-acoddion'>
             {testimonials.map((testimonial, index) => (
@@ -61,7 +75,8 @@ function Testimonials(){
                         <img className='avatar' src={testimonial.avatarUrl} alt="" />
                         <h3 className='profile-name'>{testimonial.name}</h3>
                     </div>
-                    <p className='rating'> {testimonial.rating} stars</p>
+                    <p className='rating'> <FaQuoteLeft/> </p>
+                    
                     <div className='comment'>
                         <p> {testimonial.comment}</p>
                     </div>
