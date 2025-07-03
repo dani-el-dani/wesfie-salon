@@ -1,5 +1,6 @@
 import { createServer, Model, Response } from "miragejs";
 import { ethiopianDateNow, addDays, isEqual, toDateString } from "./utils/dateUtils";
+import { staffs } from "./staff";
 
 const mockBookings = [
   {
@@ -231,11 +232,13 @@ const mockBookings = [
 
 createServer({
     models: {
-        bookings: Model
+        bookings: Model,
+        staffs: Model
     },
 
     seeds(server) {
         mockBookings.forEach(item => server.create('booking', item))
+        staffs.forEach(staff => server.create('staff', staff))
     },
 
     routes(){
@@ -266,6 +269,21 @@ createServer({
             )
           }
           
+        })
+
+
+        this.post("/login", (schema, request) => {
+            const { email, password } = JSON.parse(request.requestBody)
+            const foundUser = schema.staffs.findBy({ email, password })
+            if (!foundUser) {
+                return new Response(401, {}, { message: "No user with those credentials found!" })
+            }
+
+            foundUser.password = undefined
+            return {
+                user: foundUser,
+                token: "Enjoy your pizza, here's your tokens."
+            }
         })
     }
 })

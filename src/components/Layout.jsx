@@ -26,7 +26,7 @@ function Layout(){
 
     return(
         <div className='site-wrapper'>
-            <nav className={`${isMenuOpened ? 'nav-menu-opened': undefined}`}>
+            <nav className={`${isMenuOpened ? 'nav-menu-opened': ''}`}>
                 <div className='nav-container'>
                     <div onClick={() => setIsMenuOpened(!isMenuOpened)} className={`menu ${!isMenuOpened?'burger-menu-icon':'close-menu-icon'}`}>
                         <span></span>

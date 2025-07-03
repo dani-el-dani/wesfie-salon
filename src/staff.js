@@ -15,6 +15,8 @@ export const staffs = [
         name: 'Selam Tesfaye',
         info: 'A master of natural and protective styling, Selam brings over 10 years of experience in Ethiopian and contemporary hair artistry. Her braids are legendary! ',
         spaciality: 'hair',
+        email:'selamt@wesfiesalon.com',
+        password:'selamt12345',
         imageUrl: seli
     },
     {
@@ -22,6 +24,8 @@ export const staffs = [
         name: 'Meklit Abebe',
         info:'Known for bold transformations and subtle highlights, Meklit is a wizard with color and can help you find the perfect shade for your hair and skin tone.', 
         spaciality: 'hair',
+        email:'meklita@wesfiesalon.com',
+        password:'meklita12345',
         imageUrl: maki
     },
     {
@@ -29,6 +33,8 @@ export const staffs = [
         name: 'Ruth Alemu',
         info: 'Ruth is known for giving clients that smooth, silky finish with minimal heat damage. Her silk presses are flawless every time. ',
         spaciality: 'hair',
+        email:'rutha@wesfiesalon.com',
+        password:'rutha12345',
         imageUrl: ruth
     },
     {
@@ -36,6 +42,8 @@ export const staffs = [
         name: 'Mimi Assefa',
         info: 'Known for her flawless bridal and editorial looks, Mimi has worked on countless high-profile events and photoshoots. She’s all about enhancing natural beauty. ',
         spaciality: 'makeup',
+        email:'mimia@wesfiesalon.com',
+        password:'mimia12345',
         imageUrl: mimi
     },
     {
@@ -43,6 +51,8 @@ export const staffs = [
         name: 'Lidiya Demissie',
         info: 'Lidiya specializes in natural, glowing makeup with a soft glam touch — perfect for everyday elegance or camera-ready moments.',
         spaciality: 'makeup',
+        email:'lidiyad@wesfiesalon.com',
+        password:'lidiyad12345',
         imageUrl: lidu
     },
     {
@@ -50,6 +60,8 @@ export const staffs = [
         name: 'Sara Yilma',
         info: 'Sara offers a detail-oriented approach to lash extensions and brow shaping, helping clients frame their faces beautifully.',
         spaciality: 'makeup',
+        email:'saray@wesfiesalon.com',
+        password:'saray12345',
         imageUrl: sari
     },
     {
@@ -57,6 +69,8 @@ export const staffs = [
         name: 'Rahel Mekuria',
         info: 'Rahel is a perfectionist when it comes to nail care. From intricate nail art to relaxing pedicures, her work keeps our clients coming back.',
         spaciality: 'nails',
+        email:'rahelm@wesfiesalon.com',
+        password:'rahelm12345',
         imageUrl: rich
     },
     {
@@ -64,6 +78,8 @@ export const staffs = [
         name: 'Hanna Teferi',
         info: 'Hanna loves turning nails into canvases. From ombré effects to dazzling stones, she transforms nails into wearable art.',
         spaciality: 'nails',
+        email:'hannat@wesfiesalon.com',
+        password:'hannat12345',
         imageUrl: hani
     },
     {
@@ -71,6 +87,8 @@ export const staffs = [
         name: 'Betelhem Getachew',
         info: 'With a gentle touch and expert precision, Betelhem ensures every pedicure is clean, soothing, and long-lasting.',
         spaciality: 'nails',
+        email:'betelhemg@wesfiesalon.com',
+        password:'betelhemg12345',
         imageUrl: betty
     }
 ]
