@@ -18,7 +18,7 @@ export async function loader(){
     return null
 }
 
-function MySchedule () {
+function MySchedule() {
     const [date, setDate] = useState(ethiopianDateNow())
     const [bookings, setBookings] = useState([])
     const [selectedBooking, setSelectedBooking] = useState(null)

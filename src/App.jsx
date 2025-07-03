@@ -5,7 +5,7 @@ import Services from "./pages/Services"
 import AboutUs from "./pages/AboutUs"
 import Booking from "./pages/Booking"
 import './server'
-import MySchedule, {loader as myScheduleLoader} from "./pages/myschedule"
+import MySchedule, {loader as myScheduleLoader}from "./pages/MySchedule"
 import StaffLayout from "./components/StaffLayout"
 import Login, { action as loginAction, loader as loginLoader}from "./pages/Login"
 
