@@ -1,9 +1,39 @@
 import PageHeader from '../components/PageHeader'
 import mission from '../assets/images/mission.png'
 import vision from '../assets/images/light-bulb.png'
-import { staffs } from '../staff'
+import useSalonDataStore from '../store/salonDataStore'
+import { useLoaderData, Await } from 'react-router'
+import { Suspense } from 'react'
+import Error from './Error'
+
+export async function loader(){
+
+    if(useSalonDataStore.getState().mainServices.length === 0 || useSalonDataStore.getState().addOns.length === 0){
+        const promise = fetch('/api/salondata')
+            .then(res => {
+                if (!res.ok) throw {
+                    message: 'Error Fetching salon data',
+                    statusText: res.statusText,
+                    status: res.status
+                }
+                return res.json()
+            })
+            .then(data => {
+                useSalonDataStore.getState().loadSalonData(data)
+                return data
+            })
+
+        return ({ salonDatastore: promise })
+    }
+
+    else{
+        return ({salonDatastore: 'data'})
+    }
+}
 
 function AboutUs(){
+    const salonData = useLoaderData()
+    const staffs = useSalonDataStore((state) => state.staffs)
     return(
         <>
             <header>
@@ -47,19 +77,28 @@ function AboutUs(){
                 <section className='our-staff-section'>
                     <div className='section-container'>
                         <h2 className='section-title'>Meet Our Stylists</h2>
-                        <div className='our-staff-container'>
+                        <Suspense fallback={<h1 className="loading">Loading...</h1>}>
+                            <Await resolve={salonData.salonDatastore} errorElement={<Error/>}>
+                                {() => {
+                                    return (<>                                       
+                                        <div className='our-staff-container'>
 
-                            {staffs.map(staff => (
-                                <div key={staff.id} className='staff-container'>
-                                    <img src={staff.imageUrl} alt="" />
-                                    <div className='staff-detail-container'>
-                                        <h3>{staff.name}</h3>
-                                        <p>{staff.info}</p>
-                                    </div>
-                                </div>
-                            ))
-                            }
-                        </div>
+                                            {staffs.map(staff => (
+                                                <div key={staff.id} className='staff-container'>
+                                                    <img src={staff.imageUrl} alt="" />
+                                                    <div className='staff-detail-container'>
+                                                        <h3>{staff.name}</h3>
+                                                        <p>{staff.info}</p>
+                                                    </div>
+                                                </div>
+                                            ))
+                                            }
+                                        </div>
+                                    </>)
+                                }
+                                }
+                            </Await>
+                        </Suspense>
                     </div>
                 </section>
                 <section className='why-us-section'>

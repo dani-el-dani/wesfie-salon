@@ -1,13 +1,14 @@
 import Layout from "./components/Layout"
 import Home from "./pages/Home"
 import { RouterProvider, Route, createBrowserRouter, createRoutesFromElements, ScrollRestoration, Routes } from "react-router"
-import Services from "./pages/Services"
-import AboutUs from "./pages/AboutUs"
-import Booking from "./pages/Booking"
+import Services, {loader as ServicesLoader} from "./pages/Services"
+import AboutUs, {loader as AboutUsLoader} from "./pages/AboutUs"
+import Booking, {loader as BookingLoader} from "./pages/Booking"
 import './server'
 import MySchedule, {loader as myScheduleLoader}from "./pages/MySchedule"
 import StaffLayout from "./components/StaffLayout"
 import Login, { action as loginAction, loader as loginLoader}from "./pages/Login"
+import Error from "./pages/Error"
 
 const router = createBrowserRouter(createRoutesFromElements(
   [
@@ -17,9 +18,9 @@ const router = createBrowserRouter(createRoutesFromElements(
           <Layout/>
         </>}>
       <Route index element={<Home/>}/>
-      <Route path="services" element={<Services/>} />
-      <Route path="aboutus" element={<AboutUs/>} />
-      <Route path="booking" element={<Booking/>} />
+      <Route path="services" element={<Services/>} loader={ServicesLoader}/>
+      <Route path="aboutus" element={<AboutUs/>} loader={AboutUsLoader}/>
+      <Route path="booking" element={<Booking/>} loader={BookingLoader}/>
     </Route>,
     <Route element={
       <>
@@ -36,7 +37,6 @@ const router = createBrowserRouter(createRoutesFromElements(
 ))
 
 function App() {
-
   return (
       <RouterProvider router={router}/>
   )

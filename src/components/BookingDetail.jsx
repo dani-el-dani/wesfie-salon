@@ -5,12 +5,20 @@ import { GiComb } from "react-icons/gi"
 import { FiPhone, FiUser, FiCalendar, FiClock } from "react-icons/fi";
 import { MdAddCircleOutline } from "react-icons/md";
 import { FaScissors } from "react-icons/fa6"
+import useSalonDataStore from "../store/salonDataStore";
 
 function BookingDetail({bookingDetail}){
+    const mainServices = useSalonDataStore((state) => state.mainServices)
+    const addOns = useSalonDataStore((state) => state.addOns)
+
+    if(addOns.length === 0 || mainServices.length === 0){
+        return null
+    }
+
     let selectedServiceDuration = mainServices.find(service => service.id === bookingDetail.selectedService).duration
-        bookingDetail.addOns.forEach(addon => {
-            selectedServiceDuration += addOns.find(element => element.id === addon).duration
-        })
+    bookingDetail.addOns.forEach(addon => {
+        selectedServiceDuration += addOns.find(element => element.id === addon).duration
+    })
     
     let selectedServicePrice = mainServices.find(service => service.id === bookingDetail.selectedService).price
     bookingDetail.addOns.forEach(addon => {

@@ -1,5 +1,6 @@
-import { mainServices, addOns } from "../services";
-import { ethiopianDateNow, addDays, isEqual, toDateString } from "./dateUtils";
+// import { mainServices, addOns } from "../services";
+import useSalonDataStore from "../store/salonDataStore";
+// import { ethiopianDateNow, addDays, isEqual, toDateString } from "./dateUtils";
 
 const OPENINGHOUR = 2
 const CLOTHINGHOUR = 16
@@ -7,11 +8,13 @@ const INTERVAL = 15
 
 
 export async function getAvailableSlots(bookingDetails){
+    
+    const mainServices = useSalonDataStore.getState().mainServices
+    const addOns = useSalonDataStore.getState().addOns
     const response = await fetch(`/api/bookings/${bookingDetails.selectedStylist}/${bookingDetails.selectedDate}`)
     const data = await response.json()
 
     const bookings = data.bookings
-    
     let selectedServiceDuration = mainServices.find(service => service.id === bookingDetails.selectedService).duration
     bookingDetails.addOns.forEach(addon => {
         selectedServiceDuration += addOns.find(element => element.id === addon).duration

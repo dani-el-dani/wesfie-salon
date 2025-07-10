@@ -52,7 +52,7 @@ function Login(){
                 <Form method="post" replace>
                     <input name="email" type="email" placeholder="Email Adress"/>
                     <input name="password" type="password" placeholder="Password"/>
-                    <button disabled={navigation.state==='submitting'} className="login-btn">{navigation.state === 'submitting'?'Logging in':'Log In'}</button>
+                    <button disabled={navigation.state ==='submitting'} className="login-btn">{navigation.state === 'submitting' ? 'Logging in':'Log In'}</button>
                 </Form>
             </div>
         </div>

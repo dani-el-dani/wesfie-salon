@@ -23,7 +23,7 @@ function DateSelection({bookingDetail, handleChange, error}){
     const [currentMonth, setCurrentMonth] = useState(parseDate(bookingDetail.selectedDate).month)
     const [currentYear, setCurrentYear] = useState(parseDate(bookingDetail.selectedDate).year)
     const [loading, setLoading] = useState(false)
-    const curentGCdate = ethiopianToGregorian({year:currentYear,month:currentMonth,day:1})
+    const currentGCdate = ethiopianToGregorian({year:currentYear,month:currentMonth,day:1})
     const [timeSlots, setTimeSlots] = useState([])
 
     useEffect(() =>{
@@ -69,7 +69,7 @@ function DateSelection({bookingDetail, handleChange, error}){
                 <button type="button" onClick={handlePrevMonth}>&lt;</button>
                 <div>
                     <h2>{`${ETMonths[currentMonth]} ${currentYear}`}</h2>
-                    <h3>{`${GCMonths[curentGCdate.getMonth()]} ${curentGCdate.getFullYear()}`}</h3>
+                    <h3>{`${GCMonths[currentGCdate.getMonth()]} ${currentGCdate.getFullYear()}`}</h3>
                 </div>
                 <button type="button" onClick={handleNextMonth}>&gt;</button>
             </div>

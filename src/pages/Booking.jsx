@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useState, Suspense } from "react"
 import { Link } from "react-router";
 import ServiceSelection from "../components/FormComponents/ServiceSelection";
 import AddOnsSelection from "../components/FormComponents/AddOnsSelection";
@@ -6,10 +6,37 @@ import StylistSelection from "../components/FormComponents/StylistSelection";
 import ConfirmBooking from "../components/FormComponents/ConfirmBooking";
 import { ethiopianDateNow, getNextDay, toDateString, parseDate } from "../utils/dateUtils";
 import DateSelection from "../components/FormComponents/DateSelaction";
-import { useLocation } from "react-router";
+import { useLocation, Await, useLoaderData } from "react-router";
 import PersonalInfo from "../components/FormComponents/PersonalInfo";
 import BookingStatus from "../components/FormComponents/BookingStatus";
 import { motion, AnimatePresence } from "motion/react";
+import useSalonDataStore from "../store/salonDataStore";
+import Error from "./Error";
+
+export async function loader(){
+
+    if(useSalonDataStore.getState().mainServices.length === 0 || useSalonDataStore.getState().addOns.length === 0){
+        const promise = fetch('/api/salondata')
+            .then(res => {
+                if (!res.ok) throw {
+                    message: 'Error Fetching salon data',
+                    statusText: res.statusText,
+                    status: res.status
+                }
+                return res.json()
+            })
+            .then(data => {
+                useSalonDataStore.getState().loadSalonData(data) 
+                return data
+            })
+
+        return ({ salonDatastore: promise })
+    }
+
+    else{
+        return ({salonDatastore: 'data'})
+    }
+}
 
 const variants = {
   initial: direction => {
@@ -31,20 +58,20 @@ const variants = {
 }
 
 const resetBookingDetail = {
-        selectedService : null,
-        addOns:[],
-        selectedStylist:null,
-        selectedDate:toDateString(getNextDay(ethiopianDateNow())),
-        selectedTime:null,
-        fullName:'',
-        phoneNumber:''
+    selectedService : null,
+    addOns:[],
+    selectedStylist:null,
+    selectedDate:toDateString(getNextDay(ethiopianDateNow())),
+    selectedTime:null,
+    fullName:'',
+    phoneNumber:''
 
-    }
+}
 
 function Booking(){
 
     const location = useLocation()
-
+    const salonData = useLoaderData()
     const steps = ["Select service", "Select AddOns","Select stylist", "Book date and time", "Fill you information", "Confirm"]
     const [currentStep, setCurrentStep] = useState(location.state?.service ? 1 : 0)
     const [moveDir, setMoveDir] = useState('next')
@@ -239,24 +266,33 @@ function Booking(){
                     <AnimatePresence mode='popLayout' initial={false} custom={moveDir}>
                         <motion.div key={steps[currentStep]} variants={variants} initial='initial' animate='animate' exit='exit' transition={{duration: 0.3}} custom={moveDir} className='booking-steps-container'>
                             {currentStep < steps.length 
-                                ? <form onSubmit={(e) => handleFormSubmition(e)}>
-                                    
-                                        {currentStep === 0 ? <ServiceSelection bookingDetail={bookingDetail} handleChange={handleChange} error={error}/>
-                                        :currentStep === 1 ? <AddOnsSelection bookingDetail={bookingDetail} handleChange={handleAddOnsSelection} error={error}/>
-                                        :currentStep === 2 ? <StylistSelection bookingDetail={bookingDetail} handleChange={handleChange} error={error}/>
-                                        :currentStep === 3 ? <DateSelection bookingDetail={bookingDetail} handleChange={handleChange} error={error}/>
-                                        :currentStep === 4 ? <PersonalInfo bookingDetail={bookingDetail} handleChange={handleChange} error={error}/>
-                                        :<ConfirmBooking bookingDetail={bookingDetail}/>}
-                                    
-                                    <div className={`form-nav-btns ${currentStep === 0 ? 'first-step' : ''}`}>
-                                        {currentStep > 0 && <button className={`form-btn ${!loading ? 'form-btn-enabled' : 'form-btn-disabled' }`} disabled={loading} onClick={handleBackButton} type='button'>Back</button>}
-                                        {currentStep === steps.length-1
-                                            ?<button className={`form-btn ${!loading ? 'form-btn-enabled' : 'form-btn-disabled' }`} disabled={loading} key={'book'} type='submit'>Book</button>
-                                            :<button className={`form-btn ${!loading ? 'form-btn-enabled' : 'form-btn-disabled'}`} disabled={loading} key={'next'} onClick={handleNextButton} type='button'>Next</button>
+                                ? <Suspense fallback={<h1 className='loading'>Loading...</h1>}>
+                                    <Await resolve={salonData.salonDatastore} errorElement={<Error/>}>
+                                        {
+                                            () => {
+
+                                                return (<form onSubmit={(e) => handleFormSubmition(e)}>
+                                                
+                                                    {currentStep === 0 ? <ServiceSelection bookingDetail={bookingDetail} handleChange={handleChange} error={error}/>
+                                                    :currentStep === 1 ? <AddOnsSelection bookingDetail={bookingDetail} handleChange={handleAddOnsSelection} error={error}/>
+                                                    :currentStep === 2 ? <StylistSelection bookingDetail={bookingDetail} handleChange={handleChange} error={error}/>
+                                                    :currentStep === 3 ? <DateSelection bookingDetail={bookingDetail} handleChange={handleChange} error={error}/>
+                                                    :currentStep === 4 ? <PersonalInfo bookingDetail={bookingDetail} handleChange={handleChange} error={error}/>
+                                                    :<ConfirmBooking bookingDetail={bookingDetail}/>}
+                                                
+                                                    <div className={`form-nav-btns ${currentStep === 0 ? 'first-step' : ''}`}>
+                                                        {currentStep > 0 && <button className={`form-btn ${!loading ? 'form-btn-enabled' : 'form-btn-disabled' }`} disabled={loading} onClick={handleBackButton} type='button'>Back</button>}
+                                                        {currentStep === steps.length-1
+                                                            ?<button className={`form-btn ${!loading ? 'form-btn-enabled' : 'form-btn-disabled' }`} disabled={loading} key={'book'} type='submit'>Book</button>
+                                                            :<button className={`form-btn ${!loading ? 'form-btn-enabled' : 'form-btn-disabled'}`} disabled={loading} key={'next'} onClick={handleNextButton} type='button'>Next</button>
+                                                        }
+                                                    </div>
+                                                
+                                                </form>)
+                                            }
                                         }
-                                    </div>
-                                    
-                                </form>
+                                    </Await>
+                                </Suspense>
                                 
                                 : (<>
                                     {!loading 

@@ -1,9 +1,10 @@
 
 import { mainServices, addOns } from "../../services"
+import useSalonDataStore from "../../store/salonDataStore"
 import StepHeading from "./StepHeading"
 
 function ServiceSelection({bookingDetail, handleChange, error}){
-    const services = mainServices
+    const services = useSalonDataStore((state) => state.mainServices) 
     return(
         <>
             <StepHeading title='Select a Service' description="Choose the service you'd like to book"/>

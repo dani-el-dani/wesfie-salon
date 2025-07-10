@@ -1,9 +1,13 @@
-
-import { staffs } from "../../staff"
-import { mainServices } from "../../services"
 import StepHeading from "./StepHeading"
+import useSalonDataStore from "../../store/salonDataStore"
 
 function StylistSelection({bookingDetail, handleChange, error}){
+    const staffs = useSalonDataStore((state) => state.staffs)
+    const mainServices = useSalonDataStore((state) => state.mainServices)
+
+    if(staffs.length === 0 || mainServices.length === 0){
+        return null
+    }
     const stylists = staffs.filter(staff => staff.spaciality === mainServices.find(service => service.id === bookingDetail.selectedService).category)
     return(
 

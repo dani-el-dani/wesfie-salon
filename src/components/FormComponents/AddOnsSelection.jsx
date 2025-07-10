@@ -1,8 +1,14 @@
-import { addOns } from "../../services"
-import { mainServices } from "../../services"
+import useSalonDataStore from "../../store/salonDataStore"
 import StepHeading from "./StepHeading"
 
 function AddOnsSelection({bookingDetail, handleChange}){
+    
+    const addOns = useSalonDataStore((state)=> state.addOns)
+    const mainServices = useSalonDataStore((state) => state.mainServices)
+
+    if(addOns.length === 0 || mainServices.length === 0){
+        return null
+    }
     
     const avilableAddOns = addOns.filter(addOn => addOn.category === mainServices.find(service => service.id === bookingDetail.selectedService).category)
     

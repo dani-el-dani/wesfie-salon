@@ -1,6 +1,7 @@
 import { createServer, Model, Response } from "miragejs";
 import { ethiopianDateNow, addDays, isEqual, toDateString } from "./utils/dateUtils";
 import { staffs } from "./staff";
+import { mainServices, addOns } from "./services";
 
 const mockBookings = [
   {
@@ -228,23 +229,50 @@ const mockBookings = [
     fullName: "Selam Kebede",
     phoneNumber: "0933999777"
   }
-];
+]
 
 createServer({
     models: {
         bookings: Model,
-        staffs: Model
+        staffs: Model,
+        mainServices: Model,
+        addOns: Model
     },
 
     seeds(server) {
         mockBookings.forEach(item => server.create('booking', item))
         staffs.forEach(staff => server.create('staff', staff))
+        mainServices.forEach(mainService => server.create('mainService', mainService))
+        addOns.forEach(addOn => server.create('addOn', addOn))
     },
 
     routes(){
         this.namespace = "api"
         // this.logging = false
         this.timing = 2000
+
+        this.get("/salondata", (schema) => {
+          const staffs = schema.staffs.all().models.map(staff => (
+            {id:staff.id,
+              name: staff.name,
+              info: staff.info,
+              spaciality: staff.spaciality,
+              imageUrl: staff.imageUrl
+            }))
+          
+          const mainServices = schema.mainServices.all().models
+          const addOns = schema.addOns.all().models
+          if(Math.random() > 0.25){
+            return {staffs, mainServices, addOns}
+          }
+          else{
+            return new Response(
+                400,
+                { some: "header" },
+                { errors: ["name cannot be blank"] }
+              )
+            }
+        })
 
         this.get("/bookings", (schema, request) => {
             return schema.bookings.all()
@@ -265,7 +293,7 @@ createServer({
             return new Response(
               400,
               { some: "header" },
-              { errors: ["name cannot be blank"] }
+              { errors: ["Error occured during booking"] }
             )
           }
           

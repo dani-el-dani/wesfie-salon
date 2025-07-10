@@ -5,7 +5,7 @@ import nail from '../assets/images/nail-polish.png'
 import salonImg from '../assets/images/salon-img.webp'
 import Testimonials from '../components/Testimonials'
 import { galleryImages } from '../images'
-import { Link } from 'react-router'
+import { Link, useNavigation } from 'react-router'
 import { motion } from 'motion/react'
 
 function Home(){
